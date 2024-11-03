@@ -59,7 +59,7 @@ const InvoiceGenerator = () => {
             items: prev.items.filter((_, i) => i !== index)
         }));
     };
-
+    // print invoive
     const printInvoice = () => {
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
