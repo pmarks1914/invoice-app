@@ -2,30 +2,29 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
-  CCard,
-  CCardBody,
-  CCardGroup,
-  CCol,
-  CContainer,
-  CForm,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CRow,
-} from '@coreui/react'
+  Card,
+  CardBody,
+  CardGroup,
+  Col,
+  Container,
+  Form,
+  FormInput,
+  InputGroup,
+  InputGroupText,
+  Row,
+} from 'reactstrap'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from 'axios';
 import { TextField, OutlinedInput, InputLabel, MenuItem, Select } from '@mui/material';
 import Button from '@mui/material/Button';
-import { Col, Row } from 'reactstrap'
 import Box from '@mui/material/Box';
 
 import avatar9 from '../../../assets/brand/logo.png'
-import { FormControl } from '@mui/base'
+// import { FormControl } from '@mui/base'
 // import swal from 'sweetalert2'
 
-const swal = require("sweetalert2");
+// const swal = require("sweetalert2");
 let permList = [
   "can_view",
 ];
@@ -82,10 +81,10 @@ const Login = () => {
               localStorage.setItem("userDataStore", JSON.stringify(userData));
               // Cookie
               // document.cookie = "cookieData" + "=" + JSON.stringify({ 
-              //   account: "", 
+              //   aCount: "", 
               // wallet: "",
               // status: "",
-              // access: "",
+              // aCess: "",
               // refresh: "",            
               // permission_list: ""
               // })
@@ -148,15 +147,15 @@ const Login = () => {
   }
   return (
     <div className="bg-light min-vh-100 min-vw-100 d-flex flex-row align-items-center">
-      <CContainer>
+      <Container>
 
-        <CRow className="justify-content-center">
-          <CCol md={4} lg={3} xl={3}>
-            <CCard className="p-0 cl-container">
-              <CCardBody className='m-0'>
-                <CRow>
-                  <CCol xs="0" sm="0" md={0} lg="1" xl="1" ></CCol>
-                  <CCol xs="12" sm="12" md={12} lg="10" xl="10" className='trade-name' >
+        <Row className="justify-content-center">
+          <Col md={4} lg={3} xl={3}>
+            <Card className="p-0 cl-container">
+              <CardBody className='m-0'>
+                <Row>
+                  <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
+                  <Col xs="12" sm="12" md={12} lg="10" xl="10" className='trade-name' >
                     <span><img src={avatar9} className='mb-0' width="100%" alt="venture innovo" /> </span>
 
 
@@ -220,8 +219,8 @@ const Login = () => {
                       </div>
                     </Col>
                     <p className="text-medium-emphasis mb-0">{loginError}</p>
-                    <CRow>
-                      <CCol xs={12}>
+                    <Row>
+                      <Col xs={12}>
                         {/*  */}
                         {login === "Login" ?
 
@@ -240,29 +239,29 @@ const Login = () => {
                           <a dangerouslySetInnerHTML={{ __html: loader }}></a>
 
                         }
-                      </CCol>
-                    </CRow>
+                      </Col>
+                    </Row>
 
 
 
-                  </CCol>
-                  <CCol xs="0" sm="0" md={0} lg="1" xl="1" ></CCol>
-                </CRow>
+                  </Col>
+                  <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
+                </Row>
                 <div >
                 </div>
                 <p className='mt-10 mb-2 text-center'>
-                  Don{"'"}t have an account? <a href='/signup'> Sign Up </a>
+                  Don{"'"}t have an aCount? <a href='/signup'> Sign Up </a>
                   <br />
                   <a href='/reset-password' >Forget Password</a>
                 </p>
-              </CCardBody>
-            </CCard>
+              </CardBody>
+            </Card>
 
-          </CCol>
-        </CRow>
+          </Col>
+        </Row>
 
 
-      </CContainer>
+      </Container>
     </div>
   )
 }
