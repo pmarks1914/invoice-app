@@ -1,27 +1,17 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  CButton,
+  Button,
   Card,
   CardBody,
   CardGroup,
   Col,
-  Container,
-  Form,
-  FormInput,
-  InputGroup,
-  InputGroupText,
   Row,
 } from 'reactstrap'
-import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from 'axios';
-import { TextField, OutlinedInput, InputLabel, MenuItem, Select } from '@mui/material';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 
-import avatar9 from '../../../assets/brand/logo.png'
-// import { FormControl } from '@mui/base'
+
+import avatar9 from '../logo.png'
 // import swal from 'sweetalert2'
 
 // const swal = require("sweetalert2");
@@ -43,7 +33,7 @@ const Login = () => {
   const [userTypeError, setUserTypeError] = useState(false)
 
   function CheckLogin(e) {
-    e.preventDefault();    
+    e.preventDefault();
     // // console.log("fff", process.env.REACT_APP_BASE_API, passwordVar, usernameVar)
     // window.location.href = "/dashboard";
 
@@ -74,27 +64,27 @@ const Login = () => {
       };
       axios(config).then(response => {
         // console.log(response.data, "auth ", response.data.token_type + " " + response.data.token);
-        if(userType === "Student"){
-              let counter = 600000; // 600000 = 10m
-              let userData = response.data;
-              userData = {...userData, ...{type: userType, counter: counter}}
-              localStorage.setItem("userDataStore", JSON.stringify(userData));
-              // Cookie
-              // document.cookie = "cookieData" + "=" + JSON.stringify({ 
-              //   aCount: "", 
-              // wallet: "",
-              // status: "",
-              // aCess: "",
-              // refresh: "",            
-              // permission_list: ""
-              // })
-              setTimeout(() => {
-                window.location.href = "/dashboard";
-              }, 1000)
+        if (userType === "Student") {
+          let counter = 600000; // 600000 = 10m
+          let userData = response.data;
+          userData = { ...userData, ...{ type: userType, counter: counter } }
+          localStorage.setItem("userDataStore", JSON.stringify(userData));
+          // Cookie
+          // document.cookie = "cookieData" + "=" + JSON.stringify({ 
+          //   aCount: "", 
+          // wallet: "",
+          // status: "",
+          // aCess: "",
+          // refresh: "",            
+          // permission_list: ""
+          // })
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 1000)
         }
-        else if( userType === "School"){
+        else if (userType === "School") {
           //
-          
+
         }
 
 
@@ -141,67 +131,72 @@ const Login = () => {
 
   }
 
-  function userTypeLogin(e){
+  function userTypeLogin(e) {
     setUserType(e.target.value)
     setUserTypeError(false)
   }
   return (
-    <div className="bg-light min-vh-100 min-vw-100 d-flex flex-row align-items-center">
-      <Container>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
 
-        <Row className="justify-content-center">
-          <Col md={4} lg={3} xl={3}>
-            <Card className="p-0 cl-container">
-              <CardBody className='m-0'>
-                <Row>
-                  <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
-                  <Col xs="12" sm="12" md={12} lg="10" xl="10" className='trade-name' >
-                    <span><img src={avatar9} className='mb-0' width="100%" alt="venture innovo" /> </span>
+      <div className="grid grid-cols-2 gap-6 mb-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Invoice Number</label>
+          <input
+            type="text"
+            error={getFormDataError?.email}
+            id="email"
+            name="email"
+            placeholder="Email"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            required
+            onChange={(e) => (setUsernameVar(e.target.value), setGetFormDataError({ ...getFormDataError, ...{ "first_name": false } }))}
+          />
+        </div>
+        <div>
+          {/* <InputLabel shrink htmlFor="password"> </InputLabel> */}
+          <input
+            error={getFormDataError?.password}
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            placeholder="Password "
+            type="password"
+            id="password"
+            // variant = "standard"
+            autoComplete="current-password"
+            onChange={(e) => (setPasswordVar(e.target.value), setGetFormDataError({ ...getFormDataError, ...{ "password": false } }))}
+          />
+        </div>
+
+      </div>
+
+      <Row className="justify-content-center">
+        <Col md={12} lg={12} xl={12}>
+          <Card className="p-0 cl-container">
+            <CardBody className='m-0'>
+              <Row>
+                <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
+                <Col xs="12" sm="12" md={12} lg="10" xl="10" className='trade-name' >
+                  <span><img src={avatar9} className='mb-0' width="100%" alt="venture innovo" /> </span>
 
 
-                    <p className='m-0 text-center fs-6'>
-                        Login
-                    </p>
-                    <Col xs="12" sm="12" md={12} lg={12} className="mt-3" >
-                      <div className='mui-control-form' >
-                        <Box
-                          component="form"
-                          noValidate
-                          autoComplete="on"
-                        >
-                          <InputLabel shrink htmlFor="email"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.email}
-                            id="email"
-                            name="email"
-                            placeholder="Email"
-                            variant="outlined"
-                            margin="normal"
-                            type="email"
-                            fullWidth
-                            required
-                            onChange={(e) => (setUsernameVar(e.target.value), setGetFormDataError({ ...getFormDataError, ...{ "first_name": false } }))}
+                  <p className='m-0 text-center fs-6'>
+                    Login
+                  </p>
+                  <Col xs="12" sm="12" md={12} lg={12} className="mt-3" >
+                    <div className='mui-control-form' >
 
-                          />
+                      {/* <InputLabel shrink htmlFor="email"> </InputLabel> */}
 
-                          <InputLabel shrink htmlFor="password"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.password}
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            placeholder="Password "
-                            type="password"
-                            id="password"
-                            // variant = "standard"
-                            autoComplete="current-password"
-                            onChange={(e) => (setPasswordVar(e.target.value), setGetFormDataError({ ...getFormDataError, ...{ "password": false } }))}
-                          />
 
-                        </Box>
 
-                        {/* <FormControl fullWidth>
+
+
+                      {/* <FormControl fullWidth>
                           <InputLabel id="user-type-label" className='mt-3' >Select Login As * </InputLabel>
                           <Select
                             labelId="user-type-label"
@@ -216,52 +211,51 @@ const Login = () => {
                             <MenuItem value={"School"}>As School</MenuItem>
                           </Select>
                         </FormControl> */}
-                      </div>
-                    </Col>
-                    <p className="text-medium-emphasis mb-0">{loginError}</p>
-                    <Row>
-                      <Col xs={12}>
-                        {/*  */}
-                        {login === "Login" ?
-
-                          <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            onClick={(e) => CheckLogin(e)}
-                            // style={{ background: "#0a0463"}}
-                            className="bg-text-com-wp"
-                          >
-                            {login}
-                          </Button>
-                          :
-                          <a dangerouslySetInnerHTML={{ __html: loader }}></a>
-
-                        }
-                      </Col>
-                    </Row>
-
-
-
+                    </div>
                   </Col>
-                  <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
-                </Row>
-                <div >
-                </div>
-                <p className='mt-10 mb-2 text-center'>
-                  Don{"'"}t have an aCount? <a href='/signup'> Sign Up </a>
-                  <br />
-                  <a href='/reset-password' >Forget Password</a>
-                </p>
-              </CardBody>
-            </Card>
+                  <p className="text-medium-emphasis mb-0">{loginError}</p>
+                  <Row>
+                    <Col xs={12}>
+                      {/*  */}
+                      {login === "Login" ?
 
-          </Col>
-        </Row>
+                        <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 3, mb: 2 }}
+                          onClick={(e) => CheckLogin(e)}
+                          // style={{ background: "#0a0463"}}
+                          className="bg-text-com-wp"
+                        >
+                          {login}
+                        </Button>
+                        :
+                        <a dangerouslySetInnerHTML={{ __html: loader }}></a>
+
+                      }
+                    </Col>
+                  </Row>
 
 
-      </Container>
+
+                </Col>
+                <Col xs="0" sm="0" md={0} lg="1" xl="1" ></Col>
+              </Row>
+              <div >
+              </div>
+              <p className='mt-10 mb-2 text-center'>
+                Don{"'"}t have an aCount? <a href='/signup'> Sign Up </a>
+                <br />
+                <a href='/reset-password' >Forget Password</a>
+              </p>
+            </CardBody>
+          </Card>
+
+        </Col>
+      </Row>
+
+
     </div>
   )
 }
