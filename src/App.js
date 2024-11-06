@@ -11,8 +11,9 @@ function App() {
     <Router>
       <div style={{ flex: 1 }}>
         <Routes>
-        <Route path="/" element={ <SignUp /> } />
-        {/* <Route path="/" element={<Login />} /> */}
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={ <SignUp /> } />
+        {/* <Route path="/reset-password" element={ <SignUp /> } /> */}
         {/* <Route path="/" element={<InvoiceGenerator />} /> */}
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
