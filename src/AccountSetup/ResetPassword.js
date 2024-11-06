@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -84,7 +84,7 @@ const ResetPassword = () => {
           />
           {formDataError.email && <p className="text-red-500 text-sm">Email is required.</p>}
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700">New Password</label>
           <input
@@ -126,6 +126,11 @@ const ResetPassword = () => {
           Submit
         </button>
       </form>
+
+      <div className="mt-6 text-center">
+        <Link to="/" className="text-blue-500 hover:underline">Already have an account? Login</Link>
+      </div>
+
     </div>
   );
 };
