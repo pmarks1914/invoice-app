@@ -1,119 +1,111 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Button, CircularProgress, CssBaseline, InputLabel, TextField } from '@mui/material';
-import { CContainer, CRow, CCol, CCard, CCardHeader, CCardBody } from '@coreui/react';
-import avatar9 from 'path-to-avatar-image';
+import logo from '../logo.png'; // Assuming you have a logo similar to the Login component
 
-export default function ChangePassword() {
-  const navigate = useNavigate();
+const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
+  const [error, setError] = useState({ oldPassword: false, newPassword: false, newPassword2: false });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [submitError, setSubmitError] = useState("");
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setError(null);
+  const navigate = useNavigate();
 
-    const data = new FormData(event.currentTarget);
-    const oldPassword = data.get('oldPassword');
-    const newPassword = data.get('newPassword');
-    const newPassword2 = data.get('newPassword2');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate inputs
+    setError({ oldPassword: !oldPassword, newPassword: !newPassword, newPassword2: !newPassword2 });
+    if (!oldPassword || !newPassword || !newPassword2) return;
 
     if (newPassword !== newPassword2) {
-      setError('New passwords do not match');
-      setLoading(false);
+      setSubmitError("New passwords do not match.");
       return;
     }
 
-    const payload = JSON.stringify({
-      oldPassword,
-      newPassword,
-      newPassword2,
-    });
+    setLoading(true);
+    setSubmitError("");
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/v1/send/otp/email`, payload, {
-        headers: { 'Content-Type': 'application/json' },
+      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/change-password`, {
+        oldPassword,
+        newPassword,
+        newPassword2,
       });
 
-      if (response.data.code === 200) {
-        localStorage.setItem('signupInfo', payload);
-        navigate('/otp');
+      if (response.data.success) {
+        // Handle successful password change (e.g., navigate or show success message)
+        setTimeout(() => navigate('/dashboard'), 1000);
       } else {
-        setError('Failed to change password. Please try again.');
+        setSubmitError("Failed to change password. Please try again.");
       }
-    } catch (error) {
-      setError('An error occurred. Please try again later.');
+    } catch (err) {
+      setSubmitError("An error occurred. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-light min-vh-100 min-vw-100 d-flex flex-row align-items-center">
-      <CssBaseline />
-      <CContainer>
-        <CRow className="justify-content-center">
-          <CCol md={4} lg={3} xl={3}>
-            <CCard className="p-0 cl-container">
-              <CCardHeader />
-              <CCardBody className="m-0">
-                <CRow>
-                  <CCol xs="12" className="trade-name text-center">
-                    <img src={avatar9} className="mb-0" width="100%" alt="venture innovo" />
-                    <p className="m-0 fs-6">Change Password</p>
-                    <Box component="form" noValidate autoComplete="on" onSubmit={handleSubmit}>
-                      <TextField
-                        label="Old Password"
-                        name="oldPassword"
-                        placeholder="Old password"
-                        variant="outlined"
-                        margin="normal"
-                        type="password"
-                        fullWidth
-                        required
-                      />
-                      <TextField
-                        label="New Password"
-                        name="newPassword"
-                        placeholder="New password"
-                        variant="outlined"
-                        margin="normal"
-                        type="password"
-                        fullWidth
-                        required
-                      />
-                      <TextField
-                        label="Confirm New Password"
-                        name="newPassword2"
-                        placeholder="Confirm password"
-                        variant="outlined"
-                        margin="normal"
-                        type="password"
-                        fullWidth
-                        required
-                      />
-                      {error && <p style={{ color: 'red' }}>{error}</p>}
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        className="bg-text-com-wp"
-                        disabled={loading}
-                        style={{ color: '#fff' }}
-                      >
-                        {loading ? <CircularProgress size={24} /> : 'Submit'}
-                      </Button>
-                    </Box>
-                  </CCol>
-                </CRow>
-              </CCardBody>
-            </CCard>
-          </CCol>
-        </CRow>
-      </CContainer>
+    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg shadow-lg">
+      <img src={logo} alt="Logo" className="w-24 mx-auto mb-6" />
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Change Password</h2>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Old Password</label>
+          <input
+            type="password"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}
+            className={`w-full p-2 mt-1 border rounded ${error.oldPassword ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your old password"
+          />
+          {error.oldPassword && <p className="text-red-500 text-sm">Old password is required.</p>}
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700">New Password</label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className={`w-full p-2 mt-1 border rounded ${error.newPassword ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your new password"
+          />
+          {error.newPassword && <p className="text-red-500 text-sm">New password is required.</p>}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Confirm New Password</label>
+          <input
+            type="password"
+            value={newPassword2}
+            onChange={(e) => setNewPassword2(e.target.value)}
+            className={`w-full p-2 mt-1 border rounded ${error.newPassword2 ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Confirm your new password"
+          />
+          {error.newPassword2 && <p className="text-red-500 text-sm">Confirming new password is required.</p>}
+        </div>
+
+        {submitError && <p className="text-red-500 text-center mt-2">{submitError}</p>}
+        
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+          disabled={loading}
+        >
+          {loading ? <span className="loader"></span> : 'Submit'}
+        </button>
+      </form>
+
+      <div className="mt-6 text-center">
+        <a href="/dashboard" className="text-blue-500 hover:underline">Go back to Dashboard</a>
+      </div>
     </div>
   );
-}
+};
+
+export default ChangePassword;

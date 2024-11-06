@@ -1,73 +1,64 @@
-import React from 'react';
-import { Box, TextField, InputLabel, Button, CssBaseline } from '@mui/material';
-import Swal from 'sweetalert2';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
-export default function ResetPassword() {
+const ResetPassword = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: '', password: '', password1: '' });
+  const [formDataError, setFormDataError] = useState({ email: false, password: false, password1: false });
 
-  const [getFormData, setGetFormData] = React.useState({});
-  const [getFormDataError, setGetFormDataError] = React.useState({
-    email: false,
-    password: false,
-    password1: false,
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    
-    // Password validation logic
-    const hasUppercase = /[A-Z]/.test(getFormData.password || "");
-    const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;"'<>,.?/\\|~`-]/.test(getFormData.password || "");
-    const isPasswordValid = getFormData.password?.length >= 8 && hasUppercase && hasSpecialChar;
-    
-    if (!getFormData.email) {
-      setGetFormDataError({ ...getFormDataError, email: true });
-    } else if (!isPasswordValid) {
-      setGetFormDataError({ ...getFormDataError, password: true });
-    } else if (getFormData.password !== getFormData.password1) {
-      setGetFormDataError({ ...getFormDataError, password1: true });
-    } else {
+    const hasUppercase = /[A-Z]/.test(formData.password || "");
+    const hasSpecialChar = /[!@#$%^&*()_+{}\[\]:;"'<>,.?/\\|~`-]/.test(formData.password || "");
+    const isPasswordValid = formData.password?.length >= 8 && hasUppercase && hasSpecialChar;
+
+    setFormDataError({
+      email: !formData.email,
+      password: !isPasswordValid,
+      password1: formData.password !== formData.password1,
+    });
+
+    if (formData.email && isPasswordValid && formData.password === formData.password1) {
       sendOTP();
     }
   };
 
   const sendOTP = () => {
     axios.post(`${process.env.REACT_APP_BASE_API}/v1/send/otp/email`, {
-      email: getFormData.email,
-    }).then(response => {
+      email: formData.email,
+    }).then(() => {
       Swal.fire({
-        text: 'Check your email and type the code here.',
+        text: 'Check your email and enter the code here.',
         input: 'text',
         showCancelButton: true,
         confirmButtonText: 'Submit',
         preConfirm: (otpCode) => {
           if (!otpCode) {
-            Swal.showValidationMessage(`Request failed! code is required.`);
+            Swal.showValidationMessage('Code is required.');
           } else {
             resetPassword(otpCode);
           }
         },
       });
-    }).catch(error => {
+    }).catch((error) => {
       console.error("Error sending OTP:", error);
     });
   };
 
   const resetPassword = (otpCode) => {
     axios.put(`${process.env.REACT_APP_BASE_API}/v1/forget/password`, {
-      email: getFormData.email,
-      password: getFormData.password,
+      email: formData.email,
+      password: formData.password,
       code: otpCode,
-    }).then(response => {
+    }).then((response) => {
       Swal.fire({
         text: response.data.message,
         icon: 'success',
-      }).then(() => {
-        navigate('/login');
-      });
-    }).catch(error => {
+      }).then(() => navigate('/login'));
+    }).catch((error) => {
       Swal.fire({
         text: error.response?.data?.message || "Error resetting password.",
         icon: 'error',
@@ -76,57 +67,67 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="bg-light min-vh-100 min-vw-100 d-flex flex-row align-items-center">
-      <CssBaseline />
-      <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="on" className="form-container">
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <TextField
-          error={getFormDataError.email}
-          id="email"
-          name="email"
-          placeholder="Your email"
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => {
-            setGetFormData({ ...getFormData, email: e.target.value });
-            setGetFormDataError({ ...getFormDataError, email: false });
-          }}
-        />
-        <InputLabel htmlFor="newPassword">New Password</InputLabel>
-        <TextField
-          error={getFormDataError.password}
-          type="password"
-          name="password"
-          placeholder="New password"
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => {
-            setGetFormData({ ...getFormData, password: e.target.value });
-            setGetFormDataError({ ...getFormDataError, password: false });
-          }}
-        />
-        {getFormDataError.password && <p className="error-text">Password must be strong, with uppercase and special characters.</p>}
-        <InputLabel htmlFor="newPassword2">Confirm Password</InputLabel>
-        <TextField
-          error={getFormDataError.password1}
-          type="password"
-          name="password1"
-          placeholder="Confirm password"
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => {
-            setGetFormData({ ...getFormData, password1: e.target.value });
-            setGetFormDataError({ ...getFormDataError, password1: false });
-          }}
-        />
-        {getFormDataError.password1 && <p className="error-text">Passwords do not match.</p>}
-        <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 3, mb: 2 }}>
+    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Reset Password</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            value={formData.email}
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+              setFormDataError({ ...formDataError, email: false });
+            }}
+            className={`w-full p-2 mt-1 border rounded ${formDataError.email ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your email"
+          />
+          {formDataError.email && <p className="text-red-500 text-sm">Email is required.</p>}
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700">New Password</label>
+          <input
+            type="password"
+            value={formData.password}
+            onChange={(e) => {
+              setFormData({ ...formData, password: e.target.value });
+              setFormDataError({ ...formDataError, password: false });
+            }}
+            className={`w-full p-2 mt-1 border rounded ${formDataError.password ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter a new password"
+          />
+          {formDataError.password && (
+            <p className="text-red-500 text-sm">
+              Password must be at least 8 characters, with uppercase and special characters.
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input
+            type="password"
+            value={formData.password1}
+            onChange={(e) => {
+              setFormData({ ...formData, password1: e.target.value });
+              setFormDataError({ ...formDataError, password1: false });
+            }}
+            className={`w-full p-2 mt-1 border rounded ${formDataError.password1 ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Confirm your password"
+          />
+          {formDataError.password1 && <p className="text-red-500 text-sm">Passwords do not match.</p>}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+        >
           Submit
-        </Button>
-      </Box>
+        </button>
+      </form>
     </div>
   );
-}
+};
+
+export default ResetPassword;
