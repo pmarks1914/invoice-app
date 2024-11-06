@@ -4,13 +4,15 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import InvoiceGenerator from './Invoice/Invoice';
 import Login from './Login/Login'
+import SignUp from './register/signup';
 
 function App() {
   return (
     <Router>
       <div style={{ flex: 1 }}>
         <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={ <SignUp /> } />
+        {/* <Route path="/" element={<Login />} /> */}
         {/* <Route path="/" element={<InvoiceGenerator />} /> */}
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
