@@ -5,6 +5,7 @@ import './App.css';
 import InvoiceGenerator from './Invoice/Invoice';
 import Login from './Login/Login'
 import SignUp from './register/signup';
+// import ResetPassword from './AccountSetup/ResetPassword';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={ <SignUp /> } />
-        {/* <Route path="/reset-password" element={ <SignUp /> } /> */}
+        {/* <Route path="/reset-password" element={ <ResetPassword /> } /> */}
         {/* <Route path="/" element={<InvoiceGenerator />} /> */}
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
