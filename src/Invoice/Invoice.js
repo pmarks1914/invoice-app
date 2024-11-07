@@ -61,6 +61,15 @@ const InvoiceGenerator = () => {
     };
     // print invoive
     const printInvoice = () => {
+        // get old invoice list
+        const invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
+
+        let newInvoiceData = invoiceGetData || []
+        newInvoiceData.push(invoiceData)
+        // console.log("newInvoiceData ", newInvoiceData)
+        // set new invoice
+        localStorage.setItem("invoice", JSON.stringify(newInvoiceData));
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
         <html>
@@ -155,7 +164,6 @@ const InvoiceGenerator = () => {
             </body>
         </html>
         `);
-
 
     };
 
