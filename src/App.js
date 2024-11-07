@@ -7,6 +7,7 @@ import SignUp from './register/signup';
 import ResetPassword from './AccountSetup/ResetPassword';
 import ChangePassword from './AccountSetup/ChangePassword';
 import FooterNavigation from './FooterNavigation';
+import Dashboard from './Dashboard';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/reset-password" element={ <ResetPassword /> } />
         <Route path="/change-password" element={ <ChangePassword /> } />
         <Route path="/invoice" element={<InvoiceGenerator />} />
+        <Route path="/home" element={<Dashboard />} />
         
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
