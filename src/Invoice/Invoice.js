@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 
 import logo from '../logo.png'
+import { Col, Container, Row } from 'reactstrap';
 
 const InvoiceGenerator = () => {
     const [invoiceData, setInvoiceData] = useState({
@@ -168,7 +169,9 @@ const InvoiceGenerator = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        // <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <div className="">
+            <Container>
             <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
 
             <div className="grid grid-cols-2 gap-6 mb-6">
@@ -236,6 +239,7 @@ const InvoiceGenerator = () => {
                 </div>
             </div>
 
+
             <div className="mb-6">
                 <div className="font-medium mb-2">Items:</div>
                 <div className="space-y-2">
@@ -245,7 +249,7 @@ const InvoiceGenerator = () => {
                                 type="text"
                                 value={item.description}
                                 onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                                className="flex-grow p-2 border rounded"
+                                className="flex-grow p-2 border rounded grid grid-cols-2"
                                 placeholder="Item description"
                             />
                             <input
@@ -317,6 +321,8 @@ const InvoiceGenerator = () => {
             >
                 Print Invoice
             </button>
+
+            </Container>
 
         </div>
     );
