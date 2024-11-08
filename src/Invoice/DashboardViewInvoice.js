@@ -23,36 +23,6 @@ const DashboardViewInvoice = () => {
         return calculateSubtotal() + calculateTax();
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setInvoiceData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleItemChange = (index, field, value) => {
-        const newItems = [...invoiceData?.items];
-        newItems[index][field] = value;
-        setInvoiceData(prev => ({
-            ...prev,
-            items: newItems
-        }));
-    };
-
-    const addItem = () => {
-        setInvoiceData(prev => ({
-            ...prev,
-            items: [...prev.items, { description: '', quantity: 1, price: 0 }]
-        }));
-    };
-
-    const removeItem = (index) => {
-        setInvoiceData(prev => ({
-            ...prev,
-            items: prev.items?.filter((_, i) => i !== index)
-        }));
-    };
     // print invoive
     const printInvoice = () => {
         const printWindow = window.open('', '_blank');
@@ -233,31 +203,22 @@ const DashboardViewInvoice = () => {
                                 <input
                                     type="text"
                                     defaultValue={item.description}
-                                    onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                                     className="flex-grow w-20 p-2 border rounded grid grid-cols-2"
                                     placeholder="Item description"
                                 />
                                 <input
                                     type="number"
                                     defaultValue={item.quantity}
-                                    onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
                                     className="w-20 p-2 border rounded"
-                                    min="1"
+                                    // min="1"
                                 />
                                 <input
                                     type="number"
                                     defaultValue={item.price}
-                                    onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
                                     className="w-20 p-2 border rounded"
-                                    min="0"
-                                    step="0.01"
+                                    // min="0"
+                                    // step="0.01"
                                 />
-                                <button
-                                    onClick={() => removeItem(index)}
-                                    className="p-2 text-red-600 hover:text-red-800"
-                                >
-                                    <Trash2 size={20} />
-                                </button>
                             </div>
                         ))}
                     </div>
