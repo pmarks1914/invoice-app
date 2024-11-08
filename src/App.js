@@ -9,6 +9,7 @@ import ChangePassword from './AccountSetup/ChangePassword';
 import FooterNavigation from './Footer/FooterNavigation';
 import Dashboard from './Dashboard/Dashboard';
 import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
+import Profile from './Profile/Profile';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/invoice" element={<InvoiceGenerator />} />
         <Route path="/home" element={<Dashboard />} />
         <Route path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } />
+        <Route path="/profile" element={<Profile />  } />
         
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />

@@ -4,18 +4,22 @@ import { Plus, Trash2 } from 'lucide-react';
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 
+
+
 const InvoiceGenerator = () => {
+    const profileData = JSON.parse(localStorage.getItem("profile"));
+
     const [invoiceData, setInvoiceData] = useState({
         invoiceNumber: '',
         date: new Date().toISOString().split('T')[0],
         dueDate: '',
-        companyName: '',
-        companyAddress: '',
+        companyName: profileData?.companyName,
+        companyAddress: profileData?.companyAddress,
         clientName: '',
         clientAddress: '',
         items: [{ description: '', quantity: 1, price: 0 }],
-        notes: '',
-        currency: 'GHS'
+        notes: profileData?.notes || '',
+        currency: profileData?.currency || 'GHS'
     });
 
     const calculateSubtotal = () => {
@@ -23,7 +27,7 @@ const InvoiceGenerator = () => {
     };
 
     const calculateTax = () => {
-        return calculateSubtotal() * 0.1; // 10% tax rate
+        return calculateSubtotal() * ( profileData?.tax || 0  ); // 10% tax rate
     };
 
     const calculateTotal = () => {
@@ -152,7 +156,7 @@ const InvoiceGenerator = () => {
             <div class="">
                 <div class="section-total">
                     <p>Subtotal: ${invoiceData?.currency} ${calculateSubtotal().toFixed(2)}</p>
-                    <p>Tax (10%): ${invoiceData?.currency} ${calculateTax().toFixed(2)}</p>
+                    <p>Tax (${(profileData?.tax || 0)*100}%): ${invoiceData?.currency} ${calculateTax().toFixed(2)}</p>
                     <p class="total">Total: ${invoiceData?.currency} ${calculateTotal().toFixed(2)}</p>
                 </div>
                 <div class="section">
@@ -293,7 +297,7 @@ const InvoiceGenerator = () => {
                                 <span>{invoiceData?.currency} {calculateSubtotal().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between mb-2">
-                                <span>Tax (10%):</span>
+                                <span>Tax ( {(profileData?.tax || 0)*100}%):</span>
                                 <span>{invoiceData?.currency} {calculateTax().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between font-bold">
