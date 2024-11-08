@@ -9,17 +9,18 @@ import { Link } from 'react-router-dom';
 
 // get old invoice list
 let invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
-invoiceGetData = invoiceGetData.reverse()
+invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []
 
+// console.log("invoiceGetData ", invoiceGetData)
 const Dashboard = () => {
 
     const cardsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(invoiceGetData.length / cardsPerPage);
+    const totalPages = Math.ceil(invoiceGetData?.length / cardsPerPage);
   
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-    const currentCards = invoiceGetData.slice(indexOfFirstCard, indexOfLastCard);
+    const currentCards = invoiceGetData?.slice(indexOfFirstCard, indexOfLastCard);
   
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -36,7 +37,7 @@ const Dashboard = () => {
 
             <Container>
                 <Row>
-                    {currentCards.map((item, id) => (
+                    {currentCards?.map((item, id) => (
                         <Col sm="4" md="4" key={id+1} >
                             <Card className='m-1'>
                                 <CardBody>
@@ -90,7 +91,7 @@ const Dashboard = () => {
                             />
                         </PaginationItem>
 
-                        {[...Array(totalPages)].map((_, i) => (
+                        {[...Array(totalPages)]?.map((_, i) => (
                             <PaginationItem active={i + 1 === currentPage} key={i}>
                                 <PaginationLink
                                     href="#"

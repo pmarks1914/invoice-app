@@ -17,7 +17,7 @@ const FooterNavigation = () => {
     // <div className="fixed bottom-0 w-full bg-white shadow-lg border-t md:hidden">
     <div className="fixed bottom-0 w-full bg-white shadow-lg border-t">
       <div className="flex justify-around items-center p-3">
-        {navItems.map((item, index) => (
+        {navItems?.map((item, index) => (
           <button
             key={index}
             onClick={() => navigate(item.route)}

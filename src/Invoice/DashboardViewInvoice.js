@@ -12,7 +12,7 @@ const DashboardViewInvoice = () => {
     const [invoiceData, setInvoiceData] = useState(getInvoice);
 
     const calculateSubtotal = () => {
-        return invoiceData.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+        return invoiceData?.items?.reduce((sum, item) => sum + (item.quantity * item.price), 0);
     };
 
     const calculateTax = () => {
@@ -32,7 +32,7 @@ const DashboardViewInvoice = () => {
     };
 
     const handleItemChange = (index, field, value) => {
-        const newItems = [...invoiceData.items];
+        const newItems = [...invoiceData?.items];
         newItems[index][field] = value;
         setInvoiceData(prev => ({
             ...prev,
@@ -50,7 +50,7 @@ const DashboardViewInvoice = () => {
     const removeItem = (index) => {
         setInvoiceData(prev => ({
             ...prev,
-            items: prev.items.filter((_, i) => i !== index)
+            items: prev.items?.filter((_, i) => i !== index)
         }));
     };
     // print invoive
@@ -94,20 +94,20 @@ const DashboardViewInvoice = () => {
             <h1>Invoice</h1>
             <div class="section">
                 <h2>Invoice Details</h2>
-                <p>Invoice Number: ${invoiceData.invoiceNumber}</p>
-                <p>Date: ${invoiceData.date}</p>
-                <p>Due Date: ${invoiceData.dueDate}</p>
+                <p>Invoice Number: ${invoiceData?.invoiceNumber}</p>
+                <p>Date: ${invoiceData?.date}</p>
+                <p>Due Date: ${invoiceData?.dueDate}</p>
             </div>
             <div class="section-bill-from">
                 <h2>From</h2>
-                <p>${invoiceData.companyName}</p>
-                <p>${invoiceData.companyAddress}</p>
+                <p>${invoiceData?.companyName}</p>
+                <p>${invoiceData?.companyAddress}</p>
             </div>
             <div class="section-bill-gap"> <h2></h2> <p></p> </div>
             <div class="section-bill-to">
                 <h2>Bill To</h2>
-                <p>${invoiceData.clientName}</p>
-                <p>${invoiceData.clientAddress}</p>
+                <p>${invoiceData?.clientName}</p>
+                <p>${invoiceData?.clientAddress}</p>
             </div>
             <div class="section section-item">
                 <h2>Items</h2>
@@ -121,7 +121,7 @@ const DashboardViewInvoice = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    ${invoiceData.items.map(item => `
+                    ${invoiceData?.items?.map(item => `
                     <tr>
                         <td>${item.description}</td>
                         <td>${item.quantity}</td>
@@ -140,7 +140,7 @@ const DashboardViewInvoice = () => {
                 </div>
                 <div class="section">
                     <h2>Notes</h2>
-                    <p>${invoiceData.notes}</p>
+                    <p>${invoiceData?.notes}</p>
                 </div>
             </div>
             <script>
@@ -152,154 +152,175 @@ const DashboardViewInvoice = () => {
 
     };
 
+    function generateInvoiceHTML() {
+        // Your existing HTML generation code goes here
+        return `
+          <html>
+            </html>
+        `;
+      }
+      
+      function downloadInvoice(filename) {
+        const invoiceHTML = generateInvoiceHTML();
+        const blob = new Blob([invoiceHTML], { type: 'text/html' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();   
+      
+        URL.revokeObjectURL(link.href);
+      }
+      
+      const desiredFilename = "custom_invoice_name.html";
+      downloadInvoice(desiredFilename);
+      
     return (
         // <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         <div className="">
             <Container>
-            <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
+                <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
 
-            <div className="grid grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Invoice Number</label>
-                    <input
-                        type="text"
-                        name="invoiceNumber"
-                        value={invoiceData.invoiceNumber}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded"
-                        placeholder="INV-001"
-                    />
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Invoice Number</label>
+                        <input
+                            type="text"
+                            name="invoiceNumber"
+                            value={invoiceData?.invoiceNumber}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded"
+                            placeholder="INV-001"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                        <input
+                            type="date"
+                            name="date"
+                            value={invoiceData?.date}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                    <input
-                        type="date"
-                        name="date"
-                        value={invoiceData.date}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded"
-                    />
-                </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-6 mb-6">
-                <div>
-                    <div className="font-medium mb-2">From:</div>
-                    <input
-                        type="text"
-                        name="companyName"
-                        value={invoiceData.companyName}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded mb-2"
-                        placeholder="Your Company Name"
-                    />
-                    <textarea
-                        name="companyAddress"
-                        value={invoiceData.companyAddress}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded"
-                        placeholder="Your Company Address"
-                        rows="3"
-                    />
+                <div className="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <div className="font-medium mb-2">From:</div>
+                        <input
+                            type="text"
+                            name="companyName"
+                            value={invoiceData?.companyName}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded mb-2"
+                            placeholder="Your Company Name"
+                        />
+                        <textarea
+                            name="companyAddress"
+                            value={invoiceData?.companyAddress}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded"
+                            placeholder="Your Company Address"
+                            rows="3"
+                        />
+                    </div>
+                    <div>
+                        <div className="font-medium mb-2">Bill To:</div>
+                        <input
+                            type="text"
+                            name="clientName"
+                            value={invoiceData?.clientName}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded mb-2"
+                            placeholder="Client Name"
+                        />
+                        <textarea
+                            name="clientAddress"
+                            value={invoiceData?.clientAddress}
+                            // onChange={handleInputChange}
+                            className="w-full p-2 border rounded"
+                            placeholder="Client Address"
+                            rows="3"
+                        />
+                    </div>
                 </div>
-                <div>
-                    <div className="font-medium mb-2">Bill To:</div>
-                    <input
-                        type="text"
-                        name="clientName"
-                        value={invoiceData.clientName}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded mb-2"
-                        placeholder="Client Name"
-                    />
-                    <textarea
-                        name="clientAddress"
-                        value={invoiceData.clientAddress}
-                        // onChange={handleInputChange}
-                        className="w-full p-2 border rounded"
-                        placeholder="Client Address"
-                        rows="3"
-                    />
-                </div>
-            </div>
 
 
-            <div className="mb-6">
-                <div className="font-medium mb-2">Items:</div>
-                <div className="space-y-2">
-                    {invoiceData.items.map((item, index) => (
-                        <div key={index} className="flex gap-2 items-start">
-                            <input
-                                type="text"
-                                value={item.description}
-                                // onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                                className="flex-grow p-2 border rounded grid grid-cols-2"
-                                placeholder="Item description"
-                            />
-                            <input
-                                type="number"
-                                value={item.quantity}
-                                // onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
-                                className="w-24 p-2 border rounded"
-                                min="1"
-                            />
-                            <input
-                                type="number"
-                                value={item.price}
-                                // onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
-                                className="w-32 p-2 border rounded"
-                                min="0"
-                                step="0.01"
-                            />
-                            <button
-                                onClick={() => removeItem(index)}
-                                className="p-2 text-red-600 hover:text-red-800"
-                            >
-                                <Trash2 size={20} />
-                            </button>
-                        </div>
-                    ))}
+                <div className="mb-6">
+                    <div className="font-medium mb-2">Items:</div>
+                    <div className="space-y-2">
+                        {invoiceData?.items?.map((item, index) => (
+                            <div key={index} className="flex gap-0 items-start">
+                                <input
+                                    type="text"
+                                    value={item.description}
+                                    onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                                    className="flex-grow p-2 border rounded grid grid-cols-2"
+                                    placeholder="Item description"
+                                />
+                                <input
+                                    type="number"
+                                    value={item.quantity}
+                                    onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
+                                    className="w-20 p-2 border rounded"
+                                    min="1"
+                                />
+                                <input
+                                    type="number"
+                                    value={item.price}
+                                    onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
+                                    className="w-20 p-2 border rounded"
+                                    min="0"
+                                    step="0.01"
+                                />
+                                <button
+                                    onClick={() => removeItem(index)}
+                                    className="p-2 text-red-600 hover:text-red-800"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                
-            </div>
 
-            <div className="border-t pt-4">
-                <div className="flex justify-end space-y-2">
-                    <div className="w-64">
-                        <div className="flex justify-between mb-2">
-                            <span>Subtotal:</span>
-                            <span>{invoiceData?.currency} {calculateSubtotal().toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between mb-2">
-                            <span>Tax (10%):</span>
-                            <span>{invoiceData?.currency} {calculateTax().toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between font-bold">
-                            <span>Total:</span>
-                            <span>{invoiceData?.currency}{calculateTotal().toFixed(2)}</span>
+                <div className="border-t pt-4">
+                    <div className="flex justify-end space-y-2">
+                        <div className="w-64">
+                            <div className="flex justify-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>{invoiceData?.currency} {calculateSubtotal().toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between mb-2">
+                                <span>Tax (10%):</span>
+                                <span>{invoiceData?.currency} {calculateTax().toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between font-bold">
+                                <span>Total:</span>
+                                <span>{invoiceData?.currency}{calculateTotal().toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-                <textarea
-                    name="notes"
-                    value={invoiceData.notes}
-                    // onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                    placeholder="Additional notes..."
-                    rows="3"
-                />
-            </div>
+                <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea
+                        name="notes"
+                        value={invoiceData?.notes}
+                        // onChange={handleInputChange}
+                        className="w-full p-2 border rounded"
+                        placeholder="Additional notes..."
+                        rows="3"
+                    />
+                </div>
 
-            <button
-                onClick={printInvoice}
-                className="mt-6 bg-blue-500 text-white p-2 rounded"
-            >
-                Print Invoice
-            </button>
+                <button
+                    onClick={printInvoice}
+                    className="mt-6 bg-blue-500 text-white p-2 rounded"
+                >
+                    View Invoice
+                </button>
 
             </Container>
 
