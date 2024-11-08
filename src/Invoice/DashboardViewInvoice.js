@@ -152,28 +152,7 @@ const DashboardViewInvoice = () => {
 
     };
 
-    function generateInvoiceHTML() {
-        // Your existing HTML generation code goes here
-        return `
-          <html>
-            </html>
-        `;
-      }
-      
-      function downloadInvoice(filename) {
-        const invoiceHTML = generateInvoiceHTML();
-        const blob = new Blob([invoiceHTML], { type: 'text/html' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = filename;
-        link.click();   
-      
-        URL.revokeObjectURL(link.href);
-      }
-      
-      const desiredFilename = "custom_invoice_name.html";
-      downloadInvoice(desiredFilename);
-      
+
     return (
         // <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         <div className="">
