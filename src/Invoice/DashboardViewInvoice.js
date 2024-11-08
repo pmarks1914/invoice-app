@@ -4,19 +4,12 @@ import { Plus, Trash2 } from 'lucide-react';
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 
-const InvoiceGenerator = () => {
-    const [invoiceData, setInvoiceData] = useState({
-        invoiceNumber: '',
-        date: new Date().toISOString().split('T')[0],
-        dueDate: '',
-        companyName: '',
-        companyAddress: '',
-        clientName: '',
-        clientAddress: '',
-        items: [{ description: '', quantity: 1, price: 0 }],
-        notes: '',
-        currency: 'GHS'
-    });
+
+// get old invoice list
+const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
+
+const DashboardViewInvoice = () => {
+    const [invoiceData, setInvoiceData] = useState(getInvoice);
 
     const calculateSubtotal = () => {
         return invoiceData.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
@@ -62,15 +55,6 @@ const InvoiceGenerator = () => {
     };
     // print invoive
     const printInvoice = () => {
-        // get old invoice list
-        const invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
-
-        let newInvoiceData = invoiceGetData || []
-        newInvoiceData.push(invoiceData)
-        // console.log("newInvoiceData ", newInvoiceData)
-        // set new invoice
-        localStorage.setItem("invoice", JSON.stringify(newInvoiceData));
-
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
         <html>
@@ -181,7 +165,7 @@ const InvoiceGenerator = () => {
                         type="text"
                         name="invoiceNumber"
                         value={invoiceData.invoiceNumber}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="INV-001"
                     />
@@ -192,7 +176,7 @@ const InvoiceGenerator = () => {
                         type="date"
                         name="date"
                         value={invoiceData.date}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                     />
                 </div>
@@ -205,14 +189,14 @@ const InvoiceGenerator = () => {
                         type="text"
                         name="companyName"
                         value={invoiceData.companyName}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded mb-2"
                         placeholder="Your Company Name"
                     />
                     <textarea
                         name="companyAddress"
                         value={invoiceData.companyAddress}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Your Company Address"
                         rows="3"
@@ -224,14 +208,14 @@ const InvoiceGenerator = () => {
                         type="text"
                         name="clientName"
                         value={invoiceData.clientName}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded mb-2"
                         placeholder="Client Name"
                     />
                     <textarea
                         name="clientAddress"
                         value={invoiceData.clientAddress}
-                        onChange={handleInputChange}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Client Address"
                         rows="3"
@@ -248,21 +232,21 @@ const InvoiceGenerator = () => {
                             <input
                                 type="text"
                                 value={item.description}
-                                onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                                // onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                                 className="flex-grow p-2 border rounded grid grid-cols-2"
                                 placeholder="Item description"
                             />
                             <input
                                 type="number"
                                 value={item.quantity}
-                                onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
+                                // onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
                                 className="w-24 p-2 border rounded"
                                 min="1"
                             />
                             <input
                                 type="number"
                                 value={item.price}
-                                onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
+                                // onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
                                 className="w-32 p-2 border rounded"
                                 min="0"
                                 step="0.01"
@@ -276,12 +260,7 @@ const InvoiceGenerator = () => {
                         </div>
                     ))}
                 </div>
-                <button
-                    onClick={addItem}
-                    className="mt-2 flex items-center gap-1 text-blue-600 hover:text-blue-800"
-                >
-                    <Plus size={20} /> Add Item
-                </button>
+                
             </div>
 
             <div className="border-t pt-4">
@@ -308,7 +287,7 @@ const InvoiceGenerator = () => {
                 <textarea
                     name="notes"
                     value={invoiceData.notes}
-                    onChange={handleInputChange}
+                    // onChange={handleInputChange}
                     className="w-full p-2 border rounded"
                     placeholder="Additional notes..."
                     rows="3"
@@ -323,10 +302,9 @@ const InvoiceGenerator = () => {
             </button>
 
             </Container>
-            
 
         </div>
     );
 };
 
-export default InvoiceGenerator;
+export default DashboardViewInvoice;

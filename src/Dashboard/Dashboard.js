@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import {
     Card, CardText, CardBody, CardTitle, Pagination, PaginationItem, PaginationLink, Container, Row, Col, Label, CardFooter, Button
 } from 'reactstrap';
-import Header from './Header';
+import Header from '../Header/Header';
+import { Link } from 'react-router-dom';
 
 
 // get old invoice list
@@ -21,6 +22,13 @@ const Dashboard = () => {
     const currentCards = invoiceGetData.slice(indexOfFirstCard, indexOfLastCard);
   
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+    function storeInvoiceRecord(item){
+        // set invoice
+        localStorage.setItem("old-invoice", JSON.stringify(item));
+        
+        window.location.href ="/dashboard-view-invoice"
+    }
 
     return (
         <div>
@@ -41,7 +49,8 @@ const Dashboard = () => {
                                         <CardText className='d-flex fixed-card-text'>{'INV'} <HashtagIcon className="h-6 w-6 text-gray-500" />{':'}{item?.invoiceNumber}</CardText>
                                     </Col>
                                     <Col xs="4" sm="4" md="4" className="position-relative">
-                                        <EyeIcon className="absolute top-0 right-0 h-6 w-6 text-blue-500" />
+                          
+                                        <EyeIcon className="absolute top-0 right-0 h-6 w-6 text-blue-500" onClick={()=> storeInvoiceRecord(item)} />
                                     </Col>
                                     </Row>
 

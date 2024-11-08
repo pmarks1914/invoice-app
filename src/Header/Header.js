@@ -15,10 +15,12 @@ const Header = () => {
 
   return (
     // <div className="fixed bottom-0 w-full bg-white shadow-lg border-t md:hidden">
-    <div className="fixed position-relative top-0 w-full bg-white shadow-lg border-t mb-3">
-      <div className="flex p-3">
+    <div className='m-3 mt-4'>
+      <div className="fixed position-relative top-0 w-full shadow-lg border-t mb-3 p-3 rounded-5 text-white bg-color-light-blue">
+      <div className="flex p-3 text-2xl">
         Welcome <span className="text-xs mt-1"> {} </span>
       </div>
+    </div>
     </div>
   );
 };

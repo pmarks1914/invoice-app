@@ -6,8 +6,9 @@ import Login from './Login/Login'
 import SignUp from './register/signup';
 import ResetPassword from './AccountSetup/ResetPassword';
 import ChangePassword from './AccountSetup/ChangePassword';
-import FooterNavigation from './FooterNavigation';
-import Dashboard from './Dashboard';
+import FooterNavigation from './Footer/FooterNavigation';
+import Dashboard from './Dashboard/Dashboard';
+import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 
 function App() {
   return (
@@ -20,13 +21,14 @@ function App() {
         <Route path="/change-password" element={ <ChangePassword /> } />
         <Route path="/invoice" element={<InvoiceGenerator />} />
         <Route path="/home" element={<Dashboard />} />
+        <Route path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } />
         
           {/* <Route path="/search" element={<Search />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} /> */}
         </Routes>
+        <FooterNavigation />
       </div>
-      <FooterNavigation />
     </Router>
   );
 }
