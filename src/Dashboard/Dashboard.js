@@ -7,12 +7,13 @@ import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
 
 
-// get old invoice list
-let invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
-invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []
 
 // console.log("invoiceGetData ", invoiceGetData)
 const Dashboard = () => {
+
+    // get old invoice list
+    let invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
+    invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []
 
     const cardsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);

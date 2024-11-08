@@ -157,7 +157,7 @@ const DashboardViewInvoice = () => {
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         {/* <div className=""> */}
             <Container className=' mb-10 '>
-                <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
+                <div className="text-3xl font-bold mb-6 text-gray-800">Preview Invoice</div>
 
                 <div className="grid grid-cols-2 gap-6 mb-6">
                     <div>
