@@ -254,7 +254,7 @@ const InvoiceGenerator = () => {
                                     type="text"
                                     value={item.description}
                                     onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                                    className="flex-grow p-2 border rounded grid grid-cols-2"
+                                    className="flex-grow w-20 p-2 border rounded grid grid-cols-2"
                                     placeholder="Item description"
                                 />
                                 <input

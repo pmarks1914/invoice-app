@@ -154,9 +154,9 @@ const DashboardViewInvoice = () => {
 
 
     return (
-        // <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <div className="">
-            <Container>
+        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        {/* <div className=""> */}
+            <Container className=' mb-10 '>
                 <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
 
                 <div className="grid grid-cols-2 gap-6 mb-6">
@@ -165,7 +165,7 @@ const DashboardViewInvoice = () => {
                         <input
                             type="text"
                             name="invoiceNumber"
-                            value={invoiceData?.invoiceNumber}
+                            defaultValue={invoiceData?.invoiceNumber}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="INV-001"
@@ -176,7 +176,7 @@ const DashboardViewInvoice = () => {
                         <input
                             type="date"
                             name="date"
-                            value={invoiceData?.date}
+                            defaultValue={invoiceData?.date}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                         />
@@ -189,14 +189,14 @@ const DashboardViewInvoice = () => {
                         <input
                             type="text"
                             name="companyName"
-                            value={invoiceData?.companyName}
+                            defaultValue={invoiceData?.companyName}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded mb-2"
                             placeholder="Your Company Name"
                         />
                         <textarea
                             name="companyAddress"
-                            value={invoiceData?.companyAddress}
+                            defaultValue={invoiceData?.companyAddress}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="Your Company Address"
@@ -208,14 +208,14 @@ const DashboardViewInvoice = () => {
                         <input
                             type="text"
                             name="clientName"
-                            value={invoiceData?.clientName}
+                            defaultValue={invoiceData?.clientName}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded mb-2"
                             placeholder="Client Name"
                         />
                         <textarea
                             name="clientAddress"
-                            value={invoiceData?.clientAddress}
+                            defaultValue={invoiceData?.clientAddress}
                             // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="Client Address"
@@ -232,21 +232,21 @@ const DashboardViewInvoice = () => {
                             <div key={index} className="flex gap-0 items-start">
                                 <input
                                     type="text"
-                                    value={item.description}
+                                    defaultValue={item.description}
                                     onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                                    className="flex-grow p-2 border rounded grid grid-cols-2"
+                                    className="flex-grow w-20 p-2 border rounded grid grid-cols-2"
                                     placeholder="Item description"
                                 />
                                 <input
                                     type="number"
-                                    value={item.quantity}
+                                    defaultValue={item.quantity}
                                     onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
                                     className="w-20 p-2 border rounded"
                                     min="1"
                                 />
                                 <input
                                     type="number"
-                                    value={item.price}
+                                    defaultValue={item.price}
                                     onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
                                     className="w-20 p-2 border rounded"
                                     min="0"
@@ -286,7 +286,7 @@ const DashboardViewInvoice = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
                     <textarea
                         name="notes"
-                        value={invoiceData?.notes}
+                        defaultValue={invoiceData?.notes}
                         // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Additional notes..."
@@ -296,7 +296,7 @@ const DashboardViewInvoice = () => {
 
                 <button
                     onClick={printInvoice}
-                    className="mt-6 bg-blue-500 text-white p-2 rounded"
+                    className="mt-6 mb-6 bg-blue-500 text-white p-2 rounded"
                 >
                     View Invoice
                 </button>
