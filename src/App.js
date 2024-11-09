@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import InvoiceGenerator from './Invoice/Invoice';
@@ -12,7 +12,15 @@ import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
 
 function App() {
-  console.log(window.location.pathname)
+  const [footerManage, setFooterManage] = useState(false)
+  // manage pages footer
+  useEffect(()=> {
+    if ( [ '/invoice', '/profile', '/home', '/dashboard-view-invoice'].includes(window.location.pathname) ) {
+      console.log(window.location.pathname)
+      setFooterManage(true)
+    } 
+  }, [])
+  
   return (
     <Router>
       <div style={{ flex: 1 }}>
@@ -31,7 +39,10 @@ function App() {
           <Route path="/settings" element={<Settings />} /> */}
         </Routes>
         {/* path access to footer */}
-        <FooterNavigation />
+        {
+          footerManage ? 
+          <FooterNavigation /> : ""
+        }
       </div>
     </Router>
   );
