@@ -3,6 +3,7 @@ import { Plus, Trash2 } from 'lucide-react';
 
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
+import Swal from 'sweetalert2';
 
 
 
@@ -13,6 +14,7 @@ const InvoiceGenerator = () => {
         invoiceNumber: '',
         date: new Date().toISOString().split('T')[0],
         dueDate: '',
+        timeStamp: new Date().toISOString(),
         companyName: profileData?.companyName,
         companyAddress: profileData?.companyAddress,
         clientName: '',
@@ -173,6 +175,29 @@ const InvoiceGenerator = () => {
 
     };
 
+    function actionManage(){
+        
+        Swal.fire({
+            icon: 'info',
+            title: 'Action: Generate Invoice',
+            text: 'Proceed to generate',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: "Cancel",
+            cancelButtonColor: 'red',
+            confirmButtonColor: 'blue'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                printInvoice()
+              }
+              else{
+                // 
+              }
+          } );
+    }
+    
+
     return (
         <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg shadow-lg">
         {/* <div className="m"> */}
@@ -321,7 +346,7 @@ const InvoiceGenerator = () => {
                 </div>
 
                 <button
-                    onClick={printInvoice}
+                    onClick={actionManage}
                     className="mt-6 bg-blue-500 text-white p-2 rounded"
                 >
                     Print Invoice

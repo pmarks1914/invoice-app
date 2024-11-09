@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 
@@ -14,9 +15,9 @@ const Dashboard = () => {
     // get old invoice list
     let invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
 
-    const [invoiceList, setInvoiceList] = useState(invoiceGetData ? invoiceGetData?.reverse() : []   )
+    const [invoiceList, setInvoiceList] = useState(invoiceGetData ? invoiceGetData.sort((post, newpost) => new Date(post.timeStamp) - new Date(newpost.timeStamp)).reverse()  : []   )
     useEffect(() => {
-        invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []        
+        invoiceGetData = invoiceGetData ? invoiceGetData.sort((post, newpost) => new Date(post.timeStamp) - new Date(newpost.timeStamp)).reverse() : []        
     }, [])
 
 
@@ -41,9 +42,26 @@ const Dashboard = () => {
         let deletedData = invoiceList?.filter((_, index) => index !== id);
         invoiceGetData = deletedData
 
-        // set invoice
-        localStorage.setItem("invoice", JSON.stringify(deletedData));
-        setInvoiceList(deletedData)
+        Swal.fire({
+            icon: 'info',
+            title: 'Action delete',
+            text: 'Proceed to delete',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: "Cancel",
+            cancelButtonColor: 'red',
+            confirmButtonColor: 'blue'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                // set invoice
+                localStorage.setItem("invoice", JSON.stringify(deletedData));
+                setInvoiceList(deletedData)
+              }
+              else{
+                // 
+              }
+          } );
     }
 
     return (

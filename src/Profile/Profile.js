@@ -3,6 +3,8 @@ import { Plus, Trash2 } from 'lucide-react';
 
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
+import Swal from 'sweetalert2';
+import { Select } from '@mui/material';
 
 
 
@@ -33,9 +35,27 @@ const Profile = () => {
 
     // print invoive
     const profilePost = () => {
-        // console.log("profileData ", profileData)
-        // set new Profile
-        localStorage.setItem("profile", JSON.stringify(profileData));
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Action: Save Profile',
+            text: 'Proceed to save',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: "Cancel",
+            cancelButtonColor: 'red',
+            confirmButtonColor: 'blue'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                // console.log("profileData ", profileData)
+                // set new Profile
+                localStorage.setItem("profile", JSON.stringify(profileData));
+              }
+              else{
+                // 
+              }
+          } );
 
     };
 
@@ -47,37 +67,46 @@ const Profile = () => {
 
                 <div className="grid gap-6">
                     <div>
+                        <label htmlFor='companyName'> Company Name </label>
                         <input
                             type="text"
                             name="companyName"
+                            id="companyName"
                             value={profileData?.companyName}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded mb-4"
+                            className="w-full p-2 border rounded mb-2"
                             placeholder="Your Company Name"
                         />
+                        <label htmlFor='companyAddress'> Address </label>
                         <textarea
                             name="companyAddress"
+                            id='companyAddress'
                             value={profileData?.companyAddress}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded mb-4"
+                            className="w-full p-2 border rounded mb-2"
                             placeholder="Your Company Address"
                             rows="3"
                         />
+                        <label htmlFor='currency'> Currency </label>
                         <input
                             type="text"
                             name="currency"
+                            id='currency'
                             value={profileData?.currency}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded mb-4"
+                            className="w-full p-2 border rounded mb-2"
                             placeholder="Your Currency"
                         />
+                        <label htmlFor='notes'> Notes </label>
                         <textarea
                             name="notes"
+                            id='notes'
                             value={profileData?.notes}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded mb-4"
+                            className="w-full p-2 border rounded mb-2"
                             placeholder="Your Notes"
                         />
+                        <label htmlFor='tax'> Tax </label>
                         <input
                             type="number"
                             name="tax"
@@ -88,6 +117,16 @@ const Profile = () => {
                             min="0"
                             max="100"
                         />
+              <label for="selectInvoice" className="f-w-label mb-0"> Roles </label>
+              <Select
+                // isMulti
+                className='mt-1'
+                id='selectInvoice'
+                placeholder="Select a role for the user..."
+                // onChange={handleChange}
+                // onChange={(e)=>setFormInviteData({...formInviteData, ...{"role": e}})}
+                // options={optionRoles}
+              />
                     </div>
                     
                 </div>
