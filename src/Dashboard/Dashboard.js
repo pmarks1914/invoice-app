@@ -1,5 +1,5 @@
-import { EyeIcon, HashtagIcon } from '@heroicons/react/outline';
-import React, { useState } from 'react';
+import { EyeIcon, HashtagIcon, TrashIcon } from '@heroicons/react/outline';
+import React, { useEffect, useState } from 'react';
 import {
     Card, CardText, CardBody, CardTitle, Pagination, PaginationItem, PaginationLink, Container, Row, Col, Label, CardFooter, Button
 } from 'reactstrap';
@@ -13,15 +13,20 @@ const Dashboard = () => {
 
     // get old invoice list
     let invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
-    invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []
+
+    const [invoiceList, setInvoiceList] = useState(invoiceGetData ? invoiceGetData?.reverse() : []   )
+    useEffect(() => {
+        invoiceGetData = invoiceGetData ? invoiceGetData?.reverse() : []        
+    }, [])
+
 
     const cardsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(invoiceGetData?.length / cardsPerPage);
+    const totalPages = Math.ceil(invoiceList?.length / cardsPerPage);
   
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
-    const currentCards = invoiceGetData?.slice(indexOfFirstCard, indexOfLastCard);
+    const currentCards = invoiceList?.slice(indexOfFirstCard, indexOfLastCard);
   
     const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -30,6 +35,15 @@ const Dashboard = () => {
         localStorage.setItem("old-invoice", JSON.stringify(item));
         
         window.location.href ="/dashboard-view-invoice"
+    }
+    function removeInvoiceRecord(item, id){
+        // 
+        let deletedData = invoiceList?.filter((_, index) => index !== id);
+        invoiceGetData = deletedData
+
+        // set invoice
+        localStorage.setItem("invoice", JSON.stringify(deletedData));
+        setInvoiceList(deletedData)
     }
 
     return (
@@ -53,6 +67,8 @@ const Dashboard = () => {
                                     <Col xs="4" sm="4" md="4" className="position-relative">
                           
                                         <EyeIcon className="absolute top-0 right-0 h-6 w-6 text-blue-500" onClick={()=> storeInvoiceRecord(item)} />
+
+                                        <TrashIcon className="absolute top-4 right-0 h-12 w-6 text-red-500" onClick={()=> removeInvoiceRecord(item, id)} />
                                     </Col>
                                     </Row>
 
@@ -67,12 +83,12 @@ const Dashboard = () => {
                         </Col>
                     ))}
                 </Row>
-                <Row className='mb-9'>
-                    <Col className='mb-9' >
+                <Row className='custom-iv-ps'>
+                    <Col className=' custom-inv-page-col'>
                     <Pagination
                         aria-label="Page navigation example"
                         style={{ marginTop: '20px', justifyContent: 'center' }} // Inline styles for the entire pagination
-                        className="custom-pagination" >
+                        className="custom-pagination mb-9" >
                         <PaginationItem disabled={currentPage === 1}>
                             <PaginationLink
                                 first
@@ -93,7 +109,9 @@ const Dashboard = () => {
                         </PaginationItem>
 
                         {[...Array(totalPages)]?.map((_, i) => (
-                            <PaginationItem active={i + 1 === currentPage} key={i}>
+                            <PaginationItem 
+                                active={i + 1 === currentPage} 
+                                key={i+1} >
                                 <PaginationLink
                                     href="#"
                                     onClick={() => handlePageChange(i + 1)}

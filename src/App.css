@@ -44,3 +44,13 @@
 .bg-color-light-blue{
   background-color: #304bcf;
 }
+.custom-inv-page-col{
+  margin: 0px 0px 70px 0px;
+}
+.custom-iv-ps{
+  position: absolute;
+  top: 1;
+  left: 1;
+  z-index: -1;
+  width: 100%;
+}
