@@ -4,7 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 import Swal from 'sweetalert2';
-import { Select } from '@mui/material';
+import Select, { ActionMeta, OnChangeValue } from 'react-select';
 
 
 
@@ -16,12 +16,17 @@ const Profile = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        
             setprofileData(prev => ({
                 ...prev,
                 [name]: value
             }));
-        
+    };
+    const handleInputInvTypeChange = (e) => {
+            setprofileData(prev => ({
+                ...prev,
+                "invoiceType": e.value
+            }));
+            // console.log( e.value, profileData)        
     };
 
     const handleInputTaxChange = (e) => {
@@ -59,6 +64,19 @@ const Profile = () => {
 
     };
 
+
+    // const optionRoles = Object.keys( roleData?.all_roles || []).map((post, id) => {
+    //     console.log("optionRoles ", roleData?.all_roles)
+    //     return {
+    //       "value": roleData?.all_roles[id].role_id,
+    //       "label": roleData?.all_roles[id]?.name?.toUpperCase()
+    //   }});
+    let invoiceType = [
+        { "value": "Invoice", "label": "Invoice" },
+        { "value": "Pro-Forma", "label": "Pro-Forma" },
+        { "value": "Receipt", "label": "Receipt" }
+    ]
+      
     return (
         <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg ">
         {/* <div className="m"> */}
@@ -117,15 +135,14 @@ const Profile = () => {
                             min="0"
                             max="100"
                         />
-              <label for="selectInvoice" className="f-w-label mb-0"> Roles </label>
+              <label htmlFor="selectInvoiceType" className="mb-0 mt-2"> Type </label>
               <Select
                 // isMulti
-                className='mt-1'
-                id='selectInvoice'
-                placeholder="Select a role for the user..."
-                // onChange={handleChange}
-                // onChange={(e)=>setFormInviteData({...formInviteData, ...{"role": e}})}
-                // options={optionRoles}
+                className='mt-0'
+                id='selectInvoiceType'
+                placeholder="Select an invoice..."
+                onChange={(e)=> handleInputInvTypeChange(e)}
+                options={invoiceType}
               />
                     </div>
                     

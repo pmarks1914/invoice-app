@@ -21,7 +21,8 @@ const InvoiceGenerator = () => {
         clientAddress: '',
         items: [{ description: '', quantity: 1, price: 0 }],
         notes: profileData?.notes || '',
-        currency: profileData?.currency || 'GHS'
+        currency: profileData?.currency || 'GHS',
+        invoiceType: profileData?.invoiceType || "Invoice"
     });
 
     const calculateSubtotal = () => {
@@ -82,7 +83,7 @@ const InvoiceGenerator = () => {
         printWindow.document.write(`
         <html>
             <head>
-            <title>Invoice</title>
+            <title>${invoiceData?.invoiceType}</title>
             <style>
                 body { font-family: Arial, sans-serif; padding: 20px; }
                 h1 { font-size: 24px; margin-bottom: 10px; }
@@ -114,12 +115,11 @@ const InvoiceGenerator = () => {
             <img src=${logo} alt="Company Logo" class="logo"/>
             <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;"/>
 
-            <h1>Invoice</h1>
+            <h1>${invoiceData?.invoiceType}</h1>
             <div class="section">
-                <h2>Invoice Details</h2>
-                <p>Invoice Number: ${invoiceData?.invoiceNumber}</p>
+                <h2> ${invoiceData?.invoiceType} Details</h2>
+                <p> ${invoiceData?.invoiceType} Number: ${invoiceData?.invoiceNumber}</p>
                 <p>Date: ${invoiceData?.date}</p>
-                <p>Due Date: ${invoiceData?.dueDate}</p>
             </div>
             <div class="section-bill-from">
                 <h2>From</h2>
@@ -202,7 +202,7 @@ const InvoiceGenerator = () => {
         <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg shadow-lg">
         {/* <div className="m"> */}
             <Container className=' mb-10 '>
-                <div className="text-3xl font-bold mb-6 text-gray-800">Invoice</div>
+                <div className="text-3xl font-bold mb-6 text-gray-800"> {profileData?.invoiceType || "Invoice"} </div>
 
                 <div className="grid grid-cols-2 gap-6 mb-6">
                     <div>
