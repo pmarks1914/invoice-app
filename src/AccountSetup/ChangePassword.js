@@ -49,7 +49,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg">
       <img src={logo} alt="Logo" className="w-24 mx-auto mb-6" />
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Change Password</h2>
       
