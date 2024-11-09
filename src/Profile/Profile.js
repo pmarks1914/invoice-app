@@ -140,6 +140,7 @@ const Profile = () => {
                 // isMulti
                 className='mt-0'
                 id='selectInvoiceType'
+                defaultInputValue={profileData?.invoiceType}
                 placeholder="Select an invoice..."
                 onChange={(e)=> handleInputInvTypeChange(e)}
                 options={invoiceType}

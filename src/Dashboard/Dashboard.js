@@ -76,17 +76,18 @@ const Dashboard = () => {
                                 <CardBody>
                                 <Row>
                                     <Col xs="8" sm="8" md="8">
-                                        <CardTitle tag="h6">{item?.date}</CardTitle>
+                                        <CardTitle tag="h6">{item?.date}</CardTitle>                  
                                         {/* <CardBody className='fixed-card-body' >
                                             <img src={item?.logo} className='' key='1' />
                                         </CardBody> */}
+                                        <CardTitle tag="h9">{item?.invoiceType}</CardTitle> 
                                         <CardText className='d-flex fixed-card-text'>{'INV'} <HashtagIcon className="h-6 w-6 text-gray-500" />{':'}{item?.invoiceNumber}</CardText>
                                     </Col>
                                     <Col xs="4" sm="4" md="4" className="position-relative">
                           
-                                        <EyeIcon className="absolute top-0 right-0 h-6 w-6 text-blue-500" onClick={()=> storeInvoiceRecord(item)} />
+                                        <EyeIcon className="absolute top-0 dash-view-icon right-0 h-6 w-6 text-blue-500" onClick={()=> storeInvoiceRecord(item)} />
 
-                                        <TrashIcon className="absolute top-4 right-0 h-12 w-6 text-red-500" onClick={()=> removeInvoiceRecord(item, id)} />
+                                        <TrashIcon className="absolute top-8 right-0 h-5 w-6 text-red-500" onClick={()=> removeInvoiceRecord(item, id)} />
                                     </Col>
                                     </Row>
 

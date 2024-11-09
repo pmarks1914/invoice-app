@@ -54,3 +54,6 @@
   z-index: -1;
   width: 100%;
 }
+.dash-view-icon{
+  margin-top: -8px !important;
+}

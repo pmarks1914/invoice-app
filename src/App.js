@@ -12,6 +12,7 @@ import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
 
 function App() {
+  console.log(window.location.pathname)
   return (
     <Router>
       <div style={{ flex: 1 }}>
@@ -29,6 +30,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} /> */}
         </Routes>
+        {/* path access to footer */}
         <FooterNavigation />
       </div>
     </Router>
