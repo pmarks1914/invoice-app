@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HomeIcon, SearchIcon, BellIcon, NewspaperIcon, UserIcon } from '@heroicons/react/outline';
+import { HomeIcon, CogIcon, BellIcon, NewspaperIcon, UserIcon } from '@heroicons/react/outline';
 
 
 const FooterNavigation = () => {
@@ -8,9 +8,9 @@ const FooterNavigation = () => {
 
   const navItems = [
     { name: 'Home', icon: <HomeIcon className="h-6 w-6 bg-red" />, route: '/home' },
-    // { name: 'Search', icon: <SearchIcon className="h-6 w-6" />, route: '/search' },
     { name: 'Invoice', icon: <NewspaperIcon className="h-6 w-6" />, route: '/invoice' },
     { name: 'Profile', icon: <UserIcon className="h-6 w-6" />, route: '/profile' },
+    { name: 'Settings', icon: <CogIcon className="h-6 w-6" />, route: '/change-password' },
   ];
 
   return (

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../logo.png'; // Assuming you have a logo similar to the Login component
+import LockOut from '../Profile/LockOut';
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -49,7 +50,9 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg">
+    <div>        
+    <div className="max-w-md mx-auto p-8 mt-0 bg-white rounded-lg">           
+      <LockOut />
       <img src={logo} alt="Logo" className="w-24 mx-auto mb-6" />
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Change Password</h2>
       
@@ -94,7 +97,7 @@ const ChangePassword = () => {
         
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+          className="w-full py-2 px-4 bg-color-light-blue hover:bg-blue-700 font-semibold rounded"
           disabled={loading}
         >
           {loading ? <span className="loader"></span> : 'Submit'}
@@ -102,8 +105,9 @@ const ChangePassword = () => {
       </form>
 
       <div className="mt-6 text-center">
-        <a href="/dashboard" className="text-blue-500 hover:underline">Go back to Dashboard</a>
+        <a href="/" className="text-blue-500 hover:underline">Go back to Dashboard</a>
       </div>
+    </div>
     </div>
   );
 };
