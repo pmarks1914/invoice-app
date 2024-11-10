@@ -347,7 +347,7 @@ const InvoiceGenerator = () => {
 
                 <button
                     onClick={actionManage}
-                    className="mt-6 bg-blue-500 text-white p-2 rounded"
+                    className="mt-6 bg-color-light-blue p-2 rounded"
                 >
                     Print Invoice
                 </button>

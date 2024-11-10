@@ -57,7 +57,7 @@ const ResetPassword = () => {
       Swal.fire({
         text: response.data.message,
         icon: 'success',
-      }).then(() => navigate('/login'));
+      }).then(() => window.location.href = '/login');
     }).catch((error) => {
       Swal.fire({
         text: error.response?.data?.message || "Error resetting password.",

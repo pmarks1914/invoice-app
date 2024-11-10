@@ -5,6 +5,7 @@ import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 import Swal from 'sweetalert2';
 import Select, { ActionMeta, OnChangeValue } from 'react-select';
+import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/outline';
 
 
 
@@ -64,6 +65,10 @@ const Profile = () => {
 
     };
 
+    function lockOut(){
+        window.location.href="/";
+        localStorage.removeItem("userDataStore");
+    }
 
     // const optionRoles = Object.keys( roleData?.all_roles || []).map((post, id) => {
     //     console.log("optionRoles ", roleData?.all_roles)
@@ -76,10 +81,13 @@ const Profile = () => {
         { "value": "Pro-Forma", "label": "Pro-Forma" },
         { "value": "Receipt", "label": "Receipt" }
     ]
+
       
     return (
         <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg ">
         {/* <div className="m"> */}
+            <LockOpenIcon  className="h-6 w-6 float-right bg-red rounded-lg m-1 icon-lock-red" onClick={ ()=>{lockOut()} } />
+            
             <Container className=' mb-10 '>
                 <div className="text-3xl font-bold mb-6 text-gray-800">Profile</div>
 
@@ -151,7 +159,7 @@ const Profile = () => {
 
                 <button
                     onClick={profilePost}
-                    className="mt-6 bg-blue-500 text-white p-2 rounded"
+                    className="mt-6 bg-color-light-blue p-2 rounded"
                 >
                     Save
                 </button>

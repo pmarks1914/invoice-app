@@ -23,15 +23,26 @@ const Login = () => {
     setLoginError("");
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/login`, {
-        email,
-        password,
+      // axios.post()
+      let data = JSON.stringify({
+        "email": email,
+        "password": password
       });
+      let config = {
+        method: 'post',
+        url: process.env.REACT_APP_BASE_API + "/login",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+      const response = await axios( config );   
 
       const userData = { ...response.data, type: userType, counter: 600000 };
+      console.log(userData)
       localStorage.setItem("userDataStore", JSON.stringify(userData));
-      
-      setTimeout(() => navigate('/dashboard'), 1000);
+      setTimeout(() => window.location.href = '/home', 1000);
+
     } catch (err) {
       setLoading(false);
       setLoginError("Incorrect email or password.");
@@ -76,7 +87,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+          className={!loading ? 'w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded': "bg-gray-600 "}
           disabled={loading}
         >
           {loading ? <span className="loader"></span> : 'Login'}

@@ -36,31 +36,140 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/signup`, formData);
-      if (response.status === 200) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registration successful',
-          text: 'Check your email for verification.',
-          confirmButtonText: 'OK'
-        }).then(() => navigate('/login'));
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration failed',
-        text: error.response?.data?.message || 'Something went wrong. Please try again.',
-        confirmButtonText: 'OK'
-      });
-    } finally {
-      setLoading(false);
-    }
+      let data = JSON.stringify(formData);
+      let config = {
+        method: 'post',
+        url: process.env.REACT_APP_BASE_API + "/v1/registration",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+      // console.log("formData ", formData)
+      sendOTP()  
   };
 
+  function sendOTP(){
+
+    const payload = JSON.stringify({
+      "email": formData?.email
+    })
+
+
+    let config_otp = {
+      method: 'post',
+      url: process.env.REACT_APP_BASE_API + "/v1/otp/email",
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      data: payload
+  };
+    axios(config_otp).then(function (response){
+      // console.log(response)
+      
+    })
+    .catch(function (error) {
+      // console.log(error);
+    });
+
+    Swal.fire({
+      text: 'Check your email and type the code here.',
+      input: 'text',
+      inputAttributes: {
+          autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Submit',
+      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
+      confirmButtonColor: '#1677ff',
+      cancelButtonColor: '#d33',
+      preConfirm: (otpCode) => {
+          // otpCodecription = otpCode
+          if (otpCode === "") {
+              Swal.showValidationMessage(
+                  `Request failed! code is required.`
+              )
+          }
+          else {
+              let data = JSON.stringify({
+                  "email": formData?.email,
+                  "first_name": formData?.first_name,
+                  "last_name": formData?.last_name,
+                  "other_name": formData?.other_names,
+                  "password": formData?.password,
+                  "password1": formData?.password,
+                  "role": "STUDENT",
+                  "description": "",
+                  "address": "",
+                  "otp": otpCode
+              })
+              let config = {
+                  method: 'post',
+                  url: process.env.REACT_APP_BASE_API + "/v1/registration",
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  data: data
+              };
+
+              sendApiData(config);
+          }
+      },
+  }).then((result1) => {
+
+  })
+
+  }
+
+  function sendApiData(config){
+    // console.log(config)
+    axios(config).then(function (response){
+      
+      if(response?.data?.code === 200){
+        Swal.fire({
+          // title: 'Successfully created!',
+          text: response?.data?.message,
+          icon: "success",
+          allowOutsideClick: false,
+          // allowEscapeKey: false,
+          showCancelButton: false,
+          confirmButtonColor: '#950707',
+          // cancelButtonColor: '#d33',
+          confirmButtonText: 'Ok'
+        }).then((result) => { 
+          navigate("/")
+        });
+      }
+      else{
+        Swal.fire({
+          // title: 'Successfully created!',
+          text: response?.data?.message,
+          icon: "error",
+          allowOutsideClick: false,
+          // allowEscapeKey: false,
+          showCancelButton: false,
+          confirmButtonColor: '#950707',
+          // cancelButtonColor: '#d33',
+          confirmButtonText: 'Ok'
+        }).then((result) => { });
+      }
+      
+    })
+    .catch(function (error) {
+      Swal.fire({
+        // title: 'Successfully created!',
+        text: error?.response?.data?.message,
+        icon: "error",
+        allowOutsideClick: false,
+        // allowEscapeKey: false,
+        showCancelButton: false,
+        confirmButtonColor: '#950707',
+        // cancelButtonColor: '#d33',
+        confirmButtonText: 'Ok'
+      }).then((result) => { });    
+    });
+  }
   return (
     <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg">
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Sign Up</h2>

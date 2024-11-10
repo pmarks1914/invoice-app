@@ -256,7 +256,7 @@ const DashboardViewInvoice = () => {
 
                 <button
                     onClick={printInvoice}
-                    className="mt-6 mb-6 bg-blue-500 text-white p-2 rounded"
+                    className="mt-6 mb-6 bg-color-light-blue p-2 rounded"
                 >
                     View Invoice
                 </button>

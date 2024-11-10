@@ -37,7 +37,7 @@ const ChangePassword = () => {
 
       if (response.data.success) {
         // Handle successful password change (e.g., navigate or show success message)
-        setTimeout(() => navigate('/dashboard'), 1000);
+        setTimeout(() => window.location.href = '/dashboard', 1000);
       } else {
         setSubmitError("Failed to change password. Please try again.");
       }

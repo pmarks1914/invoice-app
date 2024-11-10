@@ -7,7 +7,7 @@ const FooterNavigation = () => {
   const navigate = useNavigate();
 
   const navItems = [
-    { name: 'Home', icon: <HomeIcon className="h-6 w-6" />, route: '/home' },
+    { name: 'Home', icon: <HomeIcon className="h-6 w-6 bg-red" />, route: '/home' },
     // { name: 'Search', icon: <SearchIcon className="h-6 w-6" />, route: '/search' },
     { name: 'Invoice', icon: <NewspaperIcon className="h-6 w-6" />, route: '/invoice' },
     { name: 'Profile', icon: <UserIcon className="h-6 w-6" />, route: '/profile' },

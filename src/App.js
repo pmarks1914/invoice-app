@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import InvoiceGenerator from './Invoice/Invoice';
@@ -10,6 +10,10 @@ import FooterNavigation from './Footer/FooterNavigation';
 import Dashboard from './Dashboard/Dashboard';
 import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
+import DefaultLayout from './DefaultLayout/DefaultLayout';
+
+
+let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
 
 function App() {
   const [footerManage, setFooterManage] = useState(false)
@@ -20,31 +24,48 @@ function App() {
       setFooterManage(true)
     } 
   }, [])
-  
+
+  console.log(window.location.pathname)
+
+  const loading = (
+    <div className="pt-3 text-center">
+      <div className="sk-spinner sk-spinner-pulse"></div>
+    </div>
+  )
+
   return (
+    <Suspense fallback={loading}>
     <Router>
       <div style={{ flex: 1 }}>
         <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={ <SignUp /> } />
-        <Route path="/reset-password" element={ <ResetPassword /> } />
-        <Route path="/change-password" element={ <ChangePassword /> } />
-        <Route path="/invoice" element={<InvoiceGenerator />} />
-        <Route path="/home" element={<Dashboard />} />
-        <Route path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } />
-        <Route path="/profile" element={<Profile />  } />
+        <Route exact path="/" element={<Login />} />
+        <Route exact path="/signup" element={ <SignUp /> } />
+        <Route exact path="/reset-password" element={ <ResetPassword /> } />
+        <Route exact path="/change-password" element={ <ChangePassword /> } />
+        <Route exact path="/invoice" element={<InvoiceGenerator />} />
+        <Route exact path="/home" element={<Dashboard />} />
+        <Route exact path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } />
+        <Route exact path="/profile" element={<Profile />  } />
         
-          {/* <Route path="/search" element={<Search />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} /> */}
-        </Routes>
+          {/* <Route exact path="/search" element={<Search />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/settings" element={<Settings />} /> */}
+
+        
         {/* path access to footer */}
-        {
+        {/* {
           footerManage ? 
           <FooterNavigation /> : ""
-        }
+        } */}
+        </Routes>
+        {
+              userDataStore?.access_key ?
+              <FooterNavigation />
+              : ""
+            }
       </div>
     </Router>
+    </Suspense>
   );
 }
 

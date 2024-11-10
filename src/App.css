@@ -43,6 +43,7 @@
 }
 .bg-color-light-blue{
   background-color: #304bcf;
+  color: #fff;
 }
 .custom-inv-page-col{
   margin: 0px 0px 70px 0px;
@@ -56,4 +57,8 @@
 }
 .dash-view-icon{
   margin-top: -8px !important;
+}
+.icon-lock-red{
+  background-color: #304bcf;
+  color: white;
 }
