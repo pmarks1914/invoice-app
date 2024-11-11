@@ -130,11 +130,8 @@ const DashboardViewInvoice = () => {
         iframe.onload = () => {
           setTimeout(() => document.body.removeChild(iframe), 500);
         };
-      };
+    };
       
-      
-
-
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
         {/* <div className=""> */}

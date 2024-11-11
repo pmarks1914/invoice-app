@@ -50,8 +50,10 @@ function App() {
             <Route exact path="/profile" element={<Profile />  } key="7" />
 
           ] : 
-          [ <Route exact path="/" element={<Login />} key="1" />, 
-          <Route exact path="/signup" element={ <SignUp /> } key="2" />]
+          [ 
+          <Route exact path="/reset-password" element={ <ResetPassword /> } key="1" />,
+          <Route exact path="/" element={<Login />} key="2" />, 
+          <Route exact path="/signup" element={ <SignUp /> } key="3" />]
         }
         </Routes>
         

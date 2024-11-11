@@ -21,7 +21,7 @@ const Dashboard = () => {
     }, [])
 
 
-    const cardsPerPage = 10;
+    const cardsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(invoiceList?.length / cardsPerPage);
   
@@ -115,7 +115,9 @@ const Dashboard = () => {
                                 onClick={() => handlePageChange(1)}
                                 style={{ color: '#000' }} // Inline style for individual links
                                 className="custom-pagination-link" // Apply custom CSS class
-                            />
+                            >
+                                {1}
+                            </PaginationLink>
                         </PaginationItem>
                         <PaginationItem disabled={currentPage === 1}>
                             <PaginationLink
@@ -128,6 +130,8 @@ const Dashboard = () => {
                         </PaginationItem>
 
                         {[...Array(totalPages)]?.map((_, i) => (
+                            
+                            i + 1 === currentPage ?
                             <PaginationItem 
                                 active={i + 1 === currentPage} 
                                 key={i+1} >
@@ -140,6 +144,7 @@ const Dashboard = () => {
                                     {i + 1}
                                 </PaginationLink>
                             </PaginationItem>
+                            : ""
                         ))}
 
                         <PaginationItem disabled={currentPage === totalPages}>
@@ -158,7 +163,9 @@ const Dashboard = () => {
                                 onClick={() => handlePageChange(totalPages)}
                                 style={{ color: '#000' }}
                                 className="custom-pagination-link"
-                            />
+                            >
+                                {totalPages}
+                            </PaginationLink>
                         </PaginationItem>
                     </Pagination>
                     </Col>
