@@ -1,143 +1,61 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import Radio from '@mui/material/Radio';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import theme from "src/styles/Styles"
-import axios from "axios"
-import { useNavigate } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import avatar9 from '../../../assets/brand/logo.png'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardGroup,
-  CCardHeader,
-  CCol,
-  CContainer,
-  CForm,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
-  CRow,
-} from '@coreui/react'
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import Swal from 'sweetalert2';
-import { Col, Row } from 'reactstrap';
 
-export default function SignUp() {
-  const navigate = useNavigate()
+const SignUp = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  const [getFormDataError, setGetFormDataError] = React.useState({
-    "password": false,
-    "password1": false,
-    "first_name": false,
-    "last_name": false,
-    "other_names": false,
-    "email": false
-  })
-  const [getFormData, setGetFormData] = React.useState({})
-  const [selectedValue, setSelectedValue] = React.useState('a');
-
-  const [country, setCountry] = React.useState('');
-  const [businessType, setBusinessType] = React.useState('');
-
-  const handleChange = (event) => {
-    setCountry(event.target.value);
+  const validateForm = () => {
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+    const newErrors = {};
+    if (!firstName) newErrors.firstName = "First name is required";
+    if (!lastName) newErrors.lastName = "Last name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleBusinessTypeChange = (event) => {
-    setBusinessType(event.target.value);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-      event.preventDefault();
-      let expPhone = /(020|023|024|025|026|027|028|050|054|055|059|233)[\s.-]?(\d{7}|\d{8})$/;
-
-      const firstname = getFormData?.first_name
-      const lastname = getFormData?.last_name
-      const email = getFormData?.email
-      const password = getFormData?.password 
-      
-      let mainCharacter = "()[]{}|\`~!@#$%^&*_-+=;:,<>./?'" + '"';
-      let alphabet ="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      let arrayAlphabet = Array.from( alphabet)
-      let arrayMainCharacter = Array.from( mainCharacter)
-      let [isPassewordValid1, isAlphabetPass1] = [false, false]
-  
-      for(let i=0; i<arrayMainCharacter.length; i++){
-        if( (Array.from(getFormData?.password || "")).includes(arrayMainCharacter[i]) ){
-          isPassewordValid1 = true
-        }
-      }
-
-      for(let i=0; i<arrayAlphabet.length; i++){
-        if( (Array.from(getFormData?.password || "")).includes(arrayAlphabet[i]) ){
-          isAlphabetPass1 = true
-        }
-      }
-      
-      if (!(getFormData?.email)){
-        
-        setGetFormDataError({...getFormDataError, ...{"email": true}})
-      } 
-      else if ( !(getFormData?.first_name) || Number(getFormData?.first_name) || getFormData?.first_name?.length < 2 ){
-        setGetFormDataError({...getFormDataError, ...{"first_name": true}})
-      }
-
-      else if ( !(getFormData?.last_name) || Number(getFormData?.last_name) || getFormData?.last_name?.length < 2){
-        
-        setGetFormDataError({...getFormDataError, ...{"last_name": true}})
-      }
-
-      // if ( !( expPhone.test(phone.replace(/\s+/g, '') ) ) ){
-      //   toast.error('Invalid phone number', {
-      //     position: toast.POSITION.TOP_RIGHT
-      // });
-      // }
-      else if (!(getFormData?.password) || getFormData?.password === "" || getFormData?.password?.length < 8 || Number(getFormData?.password) || !isPassewordValid1 || !isAlphabetPass1 ) {
-        setGetFormDataError({...getFormDataError, ...{"password": true}})
-
-
-      }
-      else if( getFormData?.password !== getFormData?.password1 ){
-        // 
-        setGetFormDataError({...getFormDataError, ...{"password1": true}})
-      }
-      else{
-        sendOTP()
-      }
-
-
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+      let data = JSON.stringify(formData);
+      let config = {
+        method: 'post',
+        url: process.env.REACT_APP_BASE_API + "/v1/registration",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+      // console.log("formData ", formData)
+      sendOTP()  
   };
 
   function sendOTP(){
-    
+
     const payload = JSON.stringify({
-      "email": getFormData?.email
+      "email": formData?.email
     })
+
+
     let config_otp = {
       method: 'post',
       url: process.env.REACT_APP_BASE_API + "/v1/otp/email",
@@ -175,12 +93,12 @@ export default function SignUp() {
           }
           else {
               let data = JSON.stringify({
-                  "email": getFormData?.email,
-                  "first_name": getFormData?.first_name,
-                  "last_name": getFormData?.last_name,
-                  "other_name": getFormData?.other_names,
-                  "password": getFormData?.password,
-                  "password1": getFormData?.password,
+                  "email": formData?.email,
+                  "first_name": formData?.first_name,
+                  "last_name": formData?.last_name,
+                  "other_name": formData?.other_names,
+                  "password": formData?.password,
+                  "password1": formData?.password,
                   "role": "STUDENT",
                   "description": "",
                   "address": "",
@@ -205,6 +123,7 @@ export default function SignUp() {
   }
 
   function sendApiData(config){
+    // console.log(config)
     axios(config).then(function (response){
       
       if(response?.data?.code === 200){
@@ -219,7 +138,7 @@ export default function SignUp() {
           // cancelButtonColor: '#d33',
           confirmButtonText: 'Ok'
         }).then((result) => { 
-          navigate("/login")
+          navigate("/")
         });
       }
       else{
@@ -251,167 +170,90 @@ export default function SignUp() {
       }).then((result) => { });    
     });
   }
-
   return (
-    
-    <div className="bg-light min-vh-100 min-vw-100 d-flex flex-row align-items-center">
-    <CssBaseline />
+    <div className="max-w-md mx-auto p-8 mt-10 bg-white rounded-lg">
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Sign Up</h2>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-1 border rounded ${errors.firstName ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your first name"
+          />
+          {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
+        </div>
 
-      <CContainer>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-1 border rounded ${errors.lastName ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your last name"
+          />
+          {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName}</p>}
+        </div>
 
-        <Row className="justify-content-center">
-          <Col md={4} lg={3} xl={3}>
-            <CCard className="p-0 cl-container">
-              <CCardHeader>
-              </CCardHeader>
-              <CCardBody className='m-0'>
-                <CRow>
-                  <CCol xs="0" sm="0" md={0} lg="1" xl="1" ></CCol>
-                  <CCol xs="12" sm="12" md={12} lg="10" xl="10" className='trade-name' >
-                    <span><img src={avatar9} className='m-0' width="100%" alt="venture innovo" /> </span>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-1 border rounded ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your email"
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        </div>
 
-                    <p className='m-0 text-center fs-6'>
-                        Sign Up
-                    </p>
-                    <CCol xs="12" sm="12" md={12} lg={12} className="mt-1" >
-                      <div className='mui-control-form' >
-                        <Box
-                          component="form"
-                          noValidate
-                          autoComplete="on"
-                        >
-                          <InputLabel shrink htmlFor="email"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.email}
-                            id="email"
-                            name="email"
-                            placeholder="Your email"
-                            variant="outlined"
-                            margin="normal"
-                            type="email"
-                            fullWidth
-                            required
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"email": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"email": false}}))}
-                          />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-1 border rounded ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Enter your password"
+          />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        </div>
 
-                          <InputLabel shrink htmlFor="fname"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.first_name}
-                            id="fname"
-                            name="fname"
-                            placeholder="First name"
-                            variant="outlined"
-                            margin="normal"
-                            type="text"
-                            fullWidth
-                            required
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"first_name": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"first_name": false}}))}
-                          />
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleInputChange}
+            className={`w-full p-2 mt-1 border rounded ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+            placeholder="Confirm your password"
+          />
+          {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
+        </div>
 
-                          <InputLabel shrink htmlFor="lname"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.last_name}
-                            id="lname"
-                            name="lname"
-                            placeholder="Last name"
-                            variant="outlined"
-                            margin="normal"
-                            type="text"
-                            fullWidth
-                            required
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"last_name": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"last_name": false}}))}
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded"
+          disabled={loading}
+        >
+          {loading ? 'Creating Account...' : 'Sign Up'}
+        </button>
+      </form>
 
-                          />
-
-                          <InputLabel shrink htmlFor="oname"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.other_names}
-                            id="oname"
-                            name="oname"
-                            placeholder="Other name"
-                            variant="outlined"
-                            margin="normal"
-                            type="text"
-                            fullWidth
-                            required
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"other_names": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"other_names": false}}))}
-                          />
-
-
-                          <InputLabel shrink htmlFor="newPassword"> </InputLabel>
-                          <TextField
-                            error={getFormDataError?.password}
-                            margin="normal"
-                            required
-                            fullWidth
-                            type="password"
-                            placeholder="New password"
-                            name="newPassword"
-                            autoFocus
-                            variant="outlined"
-                            className='mb-0'
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"password": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"password": false}}))}
-                          />
-                          {
-                            getFormDataError?.password ?
-                            <p className='mt-0 mb-0 cl-text-warn-color'>Strong password is required, eg. Yase@#3064</p>
-                            : ""
-                          }
-
-                          <InputLabel shrink htmlFor="newPassword2"> </InputLabel>
-
-                          <TextField
-                            error={getFormDataError?.password1}
-                            margin="normal"
-                            required
-                            fullWidth
-                            type="password"
-                            placeholder="Confirm password"
-                            name="newPassword2"
-                            autoFocus
-                            variant="outlined"                            
-                            className='mt-4 mb-0'
-                            onChange={(e)=> (setGetFormData({...getFormData, ...{"password1": e.target.value}}), setGetFormDataError({...getFormDataError, ...{"password1": false}}))}
-                          />
-                          {
-                            getFormDataError?.password1 ?
-                            <p className='mt-0 cl-text-warn-color'>New and confirm passwords do not match.</p>
-                            : ""
-                          }
-
-                        </Box>
-                      </div>
-                    </CCol>
-
-
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
-                      style = {{color: "#fff"}}
-                      className="bg-text-com-wp"
-                      onClick={(e)=>handleSubmit(e)}
-                    >
-                      Create
-                    </Button>
-
-                  </CCol>
-                  <CCol xs="0" sm="0" md={0} lg="1" xl="1" ></CCol>
-                </CRow>
-                <p className='mt-10 mb-2 text-center'>
-                  Already have an account? <a href='/login'> Login </a>
-                  <br />
-                  <a href='/reset-password' >Forget Password</a>
-                </p>
-              </CCardBody>
-            </CCard>
-          </Col>
-        </Row>
-
-
-      </CContainer>
-    
-  </div>
+      <div className="mt-6 text-center">
+        <Link to="/" className="text-blue-500 hover:underline">Already have an account? Login</Link>
+      </div>
+    </div>
   );
-}
+};
+
+export default SignUp;

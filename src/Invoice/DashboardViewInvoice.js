@@ -3,82 +3,28 @@ import { Plus, Trash2 } from 'lucide-react';
 
 import logo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
-import Swal from 'sweetalert2';
 
 
+// get old invoice list
+const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
 
-const InvoiceGenerator = () => {
-    const profileData = JSON.parse(localStorage.getItem("profile"));
-
-    const [invoiceData, setInvoiceData] = useState({
-        invoiceNumber: '',
-        date: new Date().toISOString().split('T')[0],
-        dueDate: '',
-        timeStamp: new Date().toISOString(),
-        companyName: profileData?.companyName,
-        companyAddress: profileData?.companyAddress,
-        clientName: '',
-        clientAddress: '',
-        items: [{ description: '', quantity: 1, price: 0 }],
-        notes: profileData?.notes || '',
-        currency: profileData?.currency || 'GHS',
-        invoiceType: profileData?.invoiceType || "Invoice"
-    });
+const DashboardViewInvoice = () => {
+    const [invoiceData, setInvoiceData] = useState(getInvoice);
 
     const calculateSubtotal = () => {
         return invoiceData?.items?.reduce((sum, item) => sum + (item.quantity * item.price), 0);
     };
 
     const calculateTax = () => {
-        return calculateSubtotal() * ( profileData?.tax || 0  ); // 10% tax rate
+        return calculateSubtotal() * 0.1; // 10% tax rate
     };
 
     const calculateTotal = () => {
         return calculateSubtotal() + calculateTax();
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setInvoiceData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleItemChange = (index, field, value) => {
-        const newItems = [...invoiceData?.items];
-        newItems[index][field] = value;
-        setInvoiceData(prev => ({
-            ...prev,
-            items: newItems
-        }));
-    };
-
-    const addItem = () => {
-        setInvoiceData(prev => ({
-            ...prev,
-            items: [...prev.items, { description: '', quantity: 1, price: 0 }]
-        }));
-    };
-
-    const removeItem = (index) => {
-        setInvoiceData(prev => ({
-            ...prev,
-            items: prev.items?.filter((_, i) => i !== index)
-        }));
-    };
     // print invoive
     const printInvoice = () => {
-        // get old invoice list
-        const invoiceGetData = JSON.parse(localStorage.getItem("invoice"));
-
-        let newInvoiceData = []
-        newInvoiceData = invoiceGetData || []
-        newInvoiceData.push(invoiceData)
-        // console.log("newInvoiceData ", newInvoiceData)
-        // set new invoice
-        localStorage.setItem("invoice", JSON.stringify(newInvoiceData));
-
         // Create the HTML content
         const invoiceContent = `
           <html>
@@ -185,44 +131,21 @@ const InvoiceGenerator = () => {
           setTimeout(() => document.body.removeChild(iframe), 500);
         };
     };
-
-    function actionManage(){
-        
-        Swal.fire({
-            icon: 'info',
-            title: 'Action: Generate Invoice',
-            text: 'Proceed to generate',
-            showCancelButton: true,
-            showConfirmButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: "Cancel",
-            cancelButtonColor: 'red',
-            confirmButtonColor: 'blue'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                printInvoice()
-              }
-              else{
-                // 
-              }
-          } );
-    }
-    
-
+      
     return (
-        <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg shadow-lg">
-        {/* <div className="m"> */}
+        <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        {/* <div className=""> */}
             <Container className=' mb-10 '>
-                <div className="text-3xl font-bold mb-6 text-gray-800"> {profileData?.invoiceType || "Invoice"} </div>
+                <div className="text-3xl font-bold mb-6 text-gray-800">Preview {invoiceData?.invoiceType || "Invoice"}</div>
 
                 <div className="grid grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Invoice Number</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1"> {invoiceData?.invoiceType || "Invoice"} Number</label>
                         <input
                             type="text"
                             name="invoiceNumber"
-                            value={invoiceData?.invoiceNumber}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.invoiceNumber}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="INV-001"
                         />
@@ -232,8 +155,8 @@ const InvoiceGenerator = () => {
                         <input
                             type="date"
                             name="date"
-                            value={invoiceData?.date}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.date}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                         />
                     </div>
@@ -245,15 +168,15 @@ const InvoiceGenerator = () => {
                         <input
                             type="text"
                             name="companyName"
-                            value={invoiceData?.companyName}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.companyName}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded mb-2"
                             placeholder="Your Company Name"
                         />
                         <textarea
                             name="companyAddress"
-                            value={invoiceData?.companyAddress}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.companyAddress}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="Your Company Address"
                             rows="3"
@@ -264,15 +187,15 @@ const InvoiceGenerator = () => {
                         <input
                             type="text"
                             name="clientName"
-                            value={invoiceData?.clientName}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.clientName}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded mb-2"
                             placeholder="Client Name"
                         />
                         <textarea
                             name="clientAddress"
-                            value={invoiceData?.clientAddress}
-                            onChange={handleInputChange}
+                            defaultValue={invoiceData?.clientAddress}
+                            // onChange={handleInputChange}
                             className="w-full p-2 border rounded"
                             placeholder="Client Address"
                             rows="3"
@@ -288,41 +211,26 @@ const InvoiceGenerator = () => {
                             <div key={index} className="flex gap-0 items-start">
                                 <input
                                     type="text"
-                                    value={item.description}
-                                    onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                                    defaultValue={item.description}
                                     className="flex-grow w-20 p-2 border rounded grid grid-cols-2"
                                     placeholder="Item description"
                                 />
                                 <input
                                     type="number"
-                                    value={item.quantity}
-                                    onChange={(e) => handleItemChange(index, 'quantity', parseFloat(e.target.value))}
+                                    defaultValue={item.quantity}
                                     className="w-20 p-2 border rounded"
-                                    min="1"
+                                    // min="1"
                                 />
                                 <input
                                     type="number"
-                                    value={item.price}
-                                    onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
+                                    defaultValue={item.price}
                                     className="w-20 p-2 border rounded"
-                                    min="0"
-                                    step="0.01"
+                                    // min="0"
+                                    // step="0.01"
                                 />
-                                <button
-                                    onClick={() => removeItem(index)}
-                                    className="p-2 text-red-600 hover:text-red-800"
-                                >
-                                    <Trash2 size={20} />
-                                </button>
                             </div>
                         ))}
                     </div>
-                    <button
-                        onClick={addItem}
-                        className="mt-2 flex items-center gap-1 text-blue-600 hover:text-blue-800"
-                    >
-                        <Plus size={20} /> Add Item
-                    </button>
                 </div>
 
                 <div className="border-t pt-4">
@@ -333,7 +241,7 @@ const InvoiceGenerator = () => {
                                 <span>{invoiceData?.currency} {calculateSubtotal().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between mb-2">
-                                <span>Tax ( {(profileData?.tax || 0)*100}%):</span>
+                                <span>Tax (10%):</span>
                                 <span>{invoiceData?.currency} {calculateTax().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between font-bold">
@@ -348,8 +256,8 @@ const InvoiceGenerator = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
                     <textarea
                         name="notes"
-                        value={invoiceData?.notes}
-                        onChange={handleInputChange}
+                        defaultValue={invoiceData?.notes}
+                        // onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Additional notes..."
                         rows="3"
@@ -357,17 +265,16 @@ const InvoiceGenerator = () => {
                 </div>
 
                 <button
-                    onClick={actionManage}
-                    className="mt-6 bg-color-light-blue p-2 rounded"
+                    onClick={printInvoice}
+                    className="mt-6 mb-6 bg-color-light-blue p-2 rounded"
                 >
-                    Print Invoice
+                    View Invoice
                 </button>
 
             </Container>
-
 
         </div>
     );
 };
 
-export default InvoiceGenerator;
+export default DashboardViewInvoice;

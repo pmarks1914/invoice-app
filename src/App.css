@@ -41,3 +41,24 @@
     transform: rotate(360deg);
   }
 }
+.bg-color-light-blue{
+  background-color: #304bcf;
+  color: #fff;
+}
+.custom-inv-page-col{
+  margin: 0px 0px 70px 0px;
+}
+.custom-iv-ps{
+  position: absolute;
+  top: 1;
+  left: 1;
+  z-index: -1;
+  width: 100%;
+}
+.dash-view-icon{
+  margin-top: -8px !important;
+}
+.icon-lock-red{
+  background-color: #e10505;
+  color: white;
+}
