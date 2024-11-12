@@ -39,7 +39,7 @@ const Login = () => {
       const response = await axios( config );   
 
       const userData = { ...response.data, type: userType, counter: 600000 };
-      console.log(userData)
+      // console.log(userData)
       localStorage.setItem("userDataStore", JSON.stringify(userData));
       setTimeout(() => window.location.href = '/home', 1000);
 
