@@ -56,7 +56,7 @@ const ChangePassword = () => {
   }
   function submitSubscription(){
     // 
-    localStorage.setItem()
+    localStorage.setItem("subscriptionType", JSON.stringify(deletedData));
     window.location.href = '/pay'
   }
 
