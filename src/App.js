@@ -10,6 +10,7 @@ import FooterNavigation from './Footer/FooterNavigation';
 import Dashboard from './Dashboard/Dashboard';
 import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
+import Payment from './Payment/Payment';
 
 
 let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
@@ -47,7 +48,8 @@ function App() {
             <Route exact path="/home" element={<Dashboard />} key="4" />,
             <Route exact path="/" element={<Dashboard />} key="5" />, 
             <Route exact path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } key="6" />,
-            <Route exact path="/profile" element={<Profile />  } key="7" />
+            <Route exact path="/profile" element={<Profile />  } key="7" />,
+            <Route exact path="/pay" element={<Payment />  } key="8" />
 
           ] : 
           [ 

@@ -53,8 +53,8 @@ const ChangePassword = () => {
     <div>        
     <div className="max-w-md mx-auto p-4 mt-0 bg-white rounded-lg">           
       <LockOut />
-      <img src={logo} alt="Logo" className="w-24 mx-auto mb-6" />
-      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Change Password</h2>
+      {/* <img src={logo} alt="Logo" className="w-24 mx-auto mb-6" /> */}
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mt-5 mb-4">Change Password</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
@@ -97,15 +97,17 @@ const ChangePassword = () => {
         
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-color-light-blue hover:bg-blue-700 font-semibold rounded"
+          className=" py-2 px-4 bg-color-light-blue hover:bg-blue-700 font-semibold rounded"
           disabled={loading}
         >
           {loading ? <span className="loader"></span> : 'Submit'}
         </button>
       </form>
 
+
       <div className="mt-6 text-center">
-        <a href="/" className="text-blue-500 hover:underline">Go back to Dashboard</a>
+        {/*  */}
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6"> Subscription </h2>
       </div>
     </div>
     </div>

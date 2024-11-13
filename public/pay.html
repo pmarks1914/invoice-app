@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title> WingiPay Simple Checkout</title>
+    <script src="/wingipay.js" ></script>
+    <!-- <script src="https://web.wingipay.com/api/cdn/wingipay.js" ></script> -->
+
+  </head>
+ <body class="container">
+  <button onclick="payWP()" class="wp-dash-btn" >Pay Now </button>
+
+    <script type ="text/javascript">
+      function payWP() {
+        // pass details
+        wpPay (JSON.stringify({
+          "apikey": "jrAALO10.F31tgGaEd7OwOSSNfI80E7Go7TCHB1Vd",
+          "currency": "GHS",
+          "note": "typeAction",
+          "amount": "1",
+          "full_name": "",
+          "phone": "",
+          "email": "",
+          "country": "GH",
+          "vendorId": "",
+          "transaction_ref": "",
+          "callbackurl": "wingipay.com",
+          "redirect_url": "",
+          "setAmountByCustomer": false
+        }))
+      }
+    </script>
+
+  </body>
+</html>
