@@ -52,6 +52,7 @@ const ChangePassword = () => {
   };
 
   function handleInputSubTypeChange(e){
+    setDataSubscriptionType(e.value)
     setLoadSubscription(true)
   }
   function submitSubscription(){
