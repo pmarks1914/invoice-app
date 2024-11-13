@@ -56,6 +56,7 @@ const ChangePassword = () => {
   }
   function submitSubscription(){
     // 
+    localStorage.setItem()
     window.location.href = '/pay'
   }
 
