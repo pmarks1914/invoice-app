@@ -49,7 +49,7 @@ function App() {
             <Route exact path="/" element={<Dashboard />} key="5" />, 
             <Route exact path="/dashboard-view-invoice" element={<DashboardViewInvoice />  } key="6" />,
             <Route exact path="/profile" element={<Profile />  } key="7" />,
-            <Route exact path="/pay" element={<Payment />  } key="8" />
+            <Route exact path="/payin" element={<Payment />  } key="8" />
 
           ] : 
           [ 

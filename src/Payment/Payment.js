@@ -1,6 +1,12 @@
 import React from 'react';
 
 const Payment = () => {
+
+    let url = window.location.href;
+    const urlObject = new URL(url);
+    const searchParams = new URLSearchParams(urlObject.search);
+    console.log(searchParams)
+    
     return (
         <div>
             
@@ -12,5 +18,8 @@ const Payment = () => {
         </div>
     );
 };
+
+
+
 
 export default Payment;
