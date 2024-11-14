@@ -60,6 +60,7 @@ const ChangePassword = () => {
     // 
     localStorage.setItem("subscriptionType", JSON.stringify({"type": DataSubscriptionType}));
     window.location.href = '/pay'
+
   }
 
 
@@ -139,18 +140,21 @@ const ChangePassword = () => {
           onChange={(e)=> handleInputSubTypeChange(e)}
           options={subscriptionType}
         />
+        
         {loadSubscription ? 
             <button
               type="submit"
               className="mt-4 py-2 px-4 bg-color-light-blue hover:bg-blue-700 font-semibold rounded"
               // disabled={loadSubscription}
-              onClick={()=>submitSubscription()}
+              // onClick={()=>submitSubscription()}
             >
-              {'Proceed'}
+              {'Subscribe'}
             </button>
             : "" }
 
       </div>
+
+
     </div>
   );
 };
