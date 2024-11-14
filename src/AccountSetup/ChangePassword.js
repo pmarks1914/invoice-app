@@ -13,7 +13,7 @@ const ChangePassword = () => {
   const [loading, setLoading] = useState(false);
   const [loadSubscription, setLoadSubscription] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [DataSubscriptionType, ssetDataSubscriptionType] = useState("")
+  const [DataSubscriptionType, setDataSubscriptionType] = useState("")
 
   const navigate = useNavigate();
 
