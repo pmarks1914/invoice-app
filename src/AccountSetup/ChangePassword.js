@@ -52,10 +52,12 @@ const ChangePassword = () => {
   };
 
   function handleInputSubTypeChange(e){
+    setDataSubscriptionType(e.value)
     setLoadSubscription(true)
   }
   function submitSubscription(){
     // 
+    localStorage.setItem("subscriptionType", JSON.stringify(deletedData));
     window.location.href = '/pay'
   }
 
