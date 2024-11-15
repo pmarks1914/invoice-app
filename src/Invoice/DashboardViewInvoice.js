@@ -131,7 +131,7 @@ const DashboardViewInvoice = () => {
             window.document.write(`${invoiceContent}
                 `);
                 window.document.close()
-
+                // for mobile
                 await Print.print({
                     content: invoiceContent,
                     name: 'Invoice',
