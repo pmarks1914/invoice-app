@@ -132,6 +132,12 @@ const DashboardViewInvoice = () => {
                 `);
                 window.document.close()
 
+                await Print.print({
+                    content: invoiceContent,
+                    name: 'Invoice',
+                    orientation: 'portrait',
+                    grayscale: false
+                });
                 // for web
                 window.print()
                 window.location.reload();
