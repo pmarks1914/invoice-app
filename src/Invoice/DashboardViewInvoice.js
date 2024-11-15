@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
-
-import logo from '../logo.png'
+import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 
+import { Print } from 'capacitor-print';
+import html2pdf from 'html2pdf.js';
+
+const logo = `${window.location.origin}${getLogo}`;
+console.log("logo ", logo)
 
 // get old invoice list
 const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
@@ -24,12 +28,14 @@ const DashboardViewInvoice = () => {
     };
 
     // print invoive
-    const printInvoice = () => {
+    const printInvoice = async () => {
         // Create the HTML content
         const invoiceContent = `
+        <!DOCTYPE html>
           <html>
               <head>
               <title>${invoiceData?.invoiceType || "Invoice"}</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <style>
                   body { font-family: Arial, sans-serif; padding: 20px; }
                   h1 { font-size: 24px; margin-bottom: 10px; }
@@ -53,6 +59,10 @@ const DashboardViewInvoice = () => {
                       opacity: 0.3;
                       z-index: -1;
                   }
+                    @media print {
+                        body { -webkit-print-color-adjust: exact; }
+                        .watermark { opacity: 0.3 !important; }
+                    }
               </style>
               </head>
               <body>
@@ -109,32 +119,72 @@ const DashboardViewInvoice = () => {
               </body>
           </html>
         `;
-      
-        // Create an iframe and set its content
-        const iframe = document.createElement('iframe');
-        document.body.appendChild(iframe);
-        iframe.style.position = 'absolute';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.style.border = 'none';
-      
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(invoiceContent);
-        doc.close();
-      
-        // Trigger print dialog
-        iframe.contentWindow.print();
-      
-        // Remove the iframe after printing
-        iframe.onload = () => {
-          setTimeout(() => document.body.removeChild(iframe), 500);
-        };
+
+
+
+        try {
+            if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            // Mobile: replace the document content with invoice content
+                
+            console.log("user agent", navigator.userAgent)
+            console.log("user onLine", navigator.onLine)
+            console.log("user platform", window?.Capacitor?.platform)
+
+               
+            window.document.write(`${invoiceContent}
+                `);
+                window.document.close()
+                // for mobile
+                await Print.print({
+                    content: invoiceContent,
+                    name: 'Invoice',
+                    orientation: 'portrait',
+                    grayscale: false
+                });
+                // for web
+                window.print()
+                window.location.reload();
+
+            } else {
+
+                // Create an iframe and set its content
+                const iframe = document.createElement('iframe');
+                document.body.appendChild(iframe);
+                iframe.style.position = 'absolute';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = 'none';
+
+                const doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write(invoiceContent);
+                doc.close();
+
+                // Trigger print dialog
+                iframe.contentWindow.print();
+
+                // Remove the iframe after printing
+                iframe.onload = () => {
+                    setTimeout(() => document.body.removeChild(iframe), 500);
+                };
+            }
+        } catch (error) {
+            console.error('Printing failed:', error);
+            // Fallback for mobile
+            const printFallback = () => {
+                const printContent = document.createElement('div');
+                printContent.innerHTML = invoiceContent;
+                document.body.appendChild(printContent);
+                window.print();
+                document.body.removeChild(printContent);
+            };
+            printFallback();
+        }
     };
-      
+
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-        {/* <div className=""> */}
+            {/* <div className=""> */}
             <Container className=' mb-10 '>
                 <div className="text-3xl font-bold mb-6 text-gray-800">Preview {invoiceData?.invoiceType || "Invoice"}</div>
 
@@ -219,14 +269,14 @@ const DashboardViewInvoice = () => {
                                     type="number"
                                     defaultValue={item.quantity}
                                     className="w-20 p-2 border rounded"
-                                    // min="1"
+                                // min="1"
                                 />
                                 <input
                                     type="number"
                                     defaultValue={item.price}
                                     className="w-20 p-2 border rounded"
-                                    // min="0"
-                                    // step="0.01"
+                                // min="0"
+                                // step="0.01"
                                 />
                             </div>
                         ))}
@@ -265,7 +315,7 @@ const DashboardViewInvoice = () => {
                 </div>
 
                 <button
-                    onClick={printInvoice}
+                    onClick={() => printInvoice()}
                     className="mt-6 mb-6 bg-color-light-blue p-2 rounded"
                 >
                     View Invoice

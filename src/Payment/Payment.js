@@ -12,9 +12,7 @@ const Payment = () => {
             
 
 
-        <iframe src='/pay.html'  width="100%" height="950px" title="Iframe Pay">
-          
-        </iframe>
+        <iframe src='/pay.html'  width="100%" height="950px" title="Iframe Pay"> </iframe>
         </div>
     );
 };
