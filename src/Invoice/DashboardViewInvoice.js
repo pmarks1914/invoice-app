@@ -132,7 +132,7 @@ const DashboardViewInvoice = () => {
                 `);
                 window.document.close()
 
-                
+                // for web
                 window.print()
                 window.location.reload();
 
