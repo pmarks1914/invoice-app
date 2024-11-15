@@ -125,7 +125,10 @@ const DashboardViewInvoice = () => {
         try {
             if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             // Mobile: replace the document content with invoice content
-                console.log("user agent", navigator)
+                
+            console.log("user agent", navigator.userAgent)
+            console.log("user onLine", navigator.onLine)
+            console.log("user platform", window?.Capacitor?.platform)
 
                
             window.document.write(`${invoiceContent}
