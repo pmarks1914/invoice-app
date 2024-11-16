@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
-import { Print } from 'capacitor-print';
-import html2pdf from 'html2pdf.js';
+import { Printer } from '@bcyesil/capacitor-plugin-printer';
 
-const logo = `${window.location.origin}${getLogo}`;
-console.log("logo ", logo)
+const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 // get old invoice list
 const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
@@ -70,7 +69,7 @@ const DashboardViewInvoice = () => {
               <body>
               <img src=${logo} alt="Company Logo" class="logo"/>
               <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;"/>
-              <h1 onclick='()=>closeAfterPrint()' >${invoiceData?.invoiceType || "Invoice"}</h1>
+              <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
               <div class="section">
                   <h2>${invoiceData?.invoiceType || "Invoice"} Details</h2>
                   <p>${invoiceData?.invoiceType || "Invoice"} Number: ${invoiceData?.invoiceNumber}</p>
@@ -123,35 +122,29 @@ const DashboardViewInvoice = () => {
         `;
 
 
-
         try {
             if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                
-                // Mobile: replace the document content with invoice content
-                window.document.write(`${invoiceContent}
-                    `);
-                    window.document.close()
-                    if(window?.Capacitor?.platform === "web"){
-                        // for web
-                        window.print()
+                // Create a new window for printing
+                window.document.write(`${invoiceContent}`);
+                window.document.close()
+                if (window?.Capacitor?.platform === "web") {
+                    // for web
+                    window.print()
+                }
+                else {
+                    // for mobile
+                    console.log('Print start:');
+                    try {
+                        Printer.print({ content: invoiceContent})
+
+                    } catch (error) {
+                        console.error('Error printing invoice:', error);
+                    } finally {
+                        console.log('Print result:');
                     }
-                    else{
-                        // for mobile
-                       console.log('Print start:');
-                        try {
-                            await Print.print({
-                              content: invoiceContent,
-                              name: 'Invoice',
-                              orientation: 'portrait',
-                            });
-                          } catch (error) {
-                            console.error('Error printing invoice:', error);
-                          } finally {
-                            console.log('Print result:');
-                          }
-                        
-                    }
-                    window.location.reload();
+
+                }
+                window.location.reload();
 
             } else {
 
@@ -190,9 +183,6 @@ const DashboardViewInvoice = () => {
         }
     };
 
-    function closeAfterPrint(){
-        window.location.reload()
-    }
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
