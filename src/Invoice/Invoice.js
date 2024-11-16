@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 
-import logo from '../logo.png'
+import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 import Swal from 'sweetalert2';
 

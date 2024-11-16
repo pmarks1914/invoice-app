@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@bcyesil/capacitor-plugin-printer": "^0.0.5",
+    "@capacitor/core": "^6.1.2",
     "@heroicons/react": "^1.0.6",
     "@mui/material": "^6.1.6",
     "@react-navigation/native": "^7.0.0",
