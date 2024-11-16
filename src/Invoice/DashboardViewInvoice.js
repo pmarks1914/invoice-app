@@ -35,6 +35,7 @@ const DashboardViewInvoice = () => {
           <html>
               <head>
               <title>${invoiceData?.invoiceType || "Invoice"}</title>
+              <meta charset="utf-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <style>
                   body { font-family: Arial, sans-serif; padding: 20px; }
@@ -60,7 +61,8 @@ const DashboardViewInvoice = () => {
                       z-index: -1;
                   }
                     @media print {
-                        body { -webkit-print-color-adjust: exact; }
+                    .invoice-content { max-width: 100%; }
+                        body {margin: 0; padding: 20px; -webkit-print-color-adjust: exact; }
                         .watermark { opacity: 0.3 !important; }
                     }
               </style>
@@ -68,7 +70,7 @@ const DashboardViewInvoice = () => {
               <body>
               <img src=${logo} alt="Company Logo" class="logo"/>
               <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;"/>
-              <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
+              <h1 onclick='()=>closeAfterPrint()' >${invoiceData?.invoiceType || "Invoice"}</h1>
               <div class="section">
                   <h2>${invoiceData?.invoiceType || "Invoice"} Details</h2>
                   <p>${invoiceData?.invoiceType || "Invoice"} Number: ${invoiceData?.invoiceNumber}</p>
@@ -124,26 +126,32 @@ const DashboardViewInvoice = () => {
 
         try {
             if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Mobile: replace the document content with invoice content
                 
-            console.log("user agent", navigator.userAgent)
-            console.log("user onLine", navigator.onLine)
-            console.log("user platform", window?.Capacitor?.platform)
-
-               
-            window.document.write(`${invoiceContent}
-                `);
-                window.document.close()
-                // for mobile
-                await Print.print({
-                    content: invoiceContent,
-                    name: 'Invoice',
-                    orientation: 'portrait',
-                    grayscale: false
-                });
-                // for web
-                window.print()
-                window.location.reload();
+                // Mobile: replace the document content with invoice content
+                window.document.write(`${invoiceContent}
+                    `);
+                    window.document.close()
+                    if(window?.Capacitor?.platform === "web"){
+                        // for web
+                        window.print()
+                    }
+                    else{
+                        // for mobile
+                       console.log('Print start:');
+                        try {
+                            await Print.print({
+                              content: invoiceContent,
+                              name: 'Invoice',
+                              orientation: 'portrait',
+                            });
+                          } catch (error) {
+                            console.error('Error printing invoice:', error);
+                          } finally {
+                            console.log('Print result:');
+                          }
+                        
+                    }
+                    window.location.reload();
 
             } else {
 
@@ -181,6 +189,10 @@ const DashboardViewInvoice = () => {
             printFallback();
         }
     };
+
+    function closeAfterPrint(){
+        window.location.reload()
+    }
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
