@@ -55,7 +55,9 @@ function App() {
           [ 
           <Route exact path="/reset-password" element={ <ResetPassword /> } key="1" />,
           <Route exact path="/" element={<Login />} key="2" />, 
-          <Route exact path="/signup" element={ <SignUp /> } key="3" />]
+          <Route exact path="/login" element={<Login />} key="3" />, 
+          <Route exact path="/signup" element={ <SignUp /> } key="4" />,
+          <Route exact path="*" element={<Login />} key="5" />, ]
         }
         </Routes>
         

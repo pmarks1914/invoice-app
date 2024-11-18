@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 
 import { Printer } from '@bcyesil/capacitor-plugin-printer';
 
