@@ -11,6 +11,7 @@ import Dashboard from './Dashboard/Dashboard';
 import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
 import Payment from './Payment/Payment';
+import AppWrapper from './Footer/AppWrapper';
 
 
 let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
@@ -36,8 +37,10 @@ function App() {
   return (
     <Suspense fallback={loading}>
     <Router>
+      <AppWrapper />
       <div style={{ flex: 1 }}>
         <Routes>
+
         {/* path access */}
         {
           userDataStore?.access_key ? 

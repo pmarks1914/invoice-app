@@ -1,32 +1,46 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { App as lps } from '@capacitor/app';
+import { App as lpd } from '@capacitor/app';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import App from '../App';
 
-const AppWrapper = () => {
+const useBackButton = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
-    const backButtonListener = lps.addListener('backButton', () => {
-      if (location.pathname === '/') {
-        // Exit app if on the root page
-        lps.exitApp();
+    const handleBackButton = () => {
+      // Check if there's history to go back to
+      if (window.history.length > 1) {
+        navigate(-1); // Go back in history
+        return { shouldUnsubscribe: false }; // Keep listening for back button
       } else {
-        // Navigate back for other pages
-        navigate(-1);
-      }
-    });
-
-    // Cleanup listener on component unmount
-    return () => {
-      if (backButtonListener) {
-        // backButtonListener.remove(); // Correct way to remove listener
+        // If no history, show exit confirmation
+        const shouldExit = window.confirm('Do you want to exit the app?');
+        if (shouldExit) {
+            lpd.exitApp();
+        }
+        return { shouldUnsubscribe: false }; // Keep listening for back button
       }
     };
-  }, [location, navigate]);
+
+    // Register back button handler
+    lpd.addListener('backButton', handleBackButton);
+
+    // Cleanup listener when component unmounts
+    return () => {
+        lpd.removeAllListeners();
+    };
+  }, [navigate]);
+};
+
+// Example usage in App.jsx or a layout component
+const AppWrapper = () => {
+  useBackButton(); // Initialize the back button handler
 
   return (
-    <div> </div>
+    <div>
+      {/* Your app content */}
+    
+    </div>
   );
 };
 
