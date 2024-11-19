@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, CogIcon, BellIcon, NewspaperIcon, UserIcon } from '@heroicons/react/outline';
+import AppWrapper from './AppWrapper';
 
 
 const FooterNavigation = () => {
@@ -16,6 +17,7 @@ const FooterNavigation = () => {
   return (
     // <div className="fixed bottom-0 w-full bg-white shadow-lg border-t md:hidden">
     <div className="fixed bottom-0 w-full bg-white shadow-lg border-t">
+      <AppWrapper />
       <div className="flex justify-around items-center p-3">
         {navItems?.map((item, index) => (
           <button
