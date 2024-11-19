@@ -1,46 +1,41 @@
-import { App as lpd } from '@capacitor/app';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import App from '../App';
+import React, { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { App as lps } from '@capacitor/app';
 
-const useBackButton = () => {
+const AppWrapper = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const handleBackButton = () => {
-      // Check if there's history to go back to
-      if (window.history.length > 1) {
-        navigate(-1); // Go back in history
-        return { shouldUnsubscribe: false }; // Keep listening for back button
+    const backButtonListener = lps.addListener('backButton', () => {
+      if (location.pathname === '/home') {
+        // Exit app if on the root page
+        lps.exitApp();
       } else {
-        // If no history, show exit confirmation
-        const shouldExit = window.confirm('Do you want to exit the app?');
-        if (shouldExit) {
-            lpd.exitApp();
+        // Navigate back for other pages
+        navigate(-1);
+      }
+    });
+
+    // Cleanup listener on component unmount
+    return () => {
+      if (backButtonListener) {
+        if (window?.Capacitor?.platform === "web") {
+            // for web
         }
-        return { shouldUnsubscribe: false }; // Keep listening for back button
+        else{
+          backButtonListener.remove() || testD(); // Correct way to remove listener
+        }
       }
     };
+  }, [location, navigate]);
 
-    // Register back button handler
-    lpd.addListener('backButton', handleBackButton);
-
-    // Cleanup listener when component unmounts
-    return () => {
-        lpd.removeAllListeners();
-    };
-  }, [navigate]);
-};
-
-// Example usage in App.jsx or a layout component
-const AppWrapper = () => {
-  useBackButton(); // Initialize the back button handler
+  function testD(){
+    // 
+  }
 
   return (
-    <div>
-      {/* Your app content */}
-    
-    </div>
+    <div>  </div>
   );
 };
 
