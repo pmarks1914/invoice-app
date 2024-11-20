@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, CogIcon, BellIcon, NewspaperIcon, UserIcon } from '@heroicons/react/outline';
+import AppWrapper from './AppWrapper';
 
 
 const FooterNavigation = () => {

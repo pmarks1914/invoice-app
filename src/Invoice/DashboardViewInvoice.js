@@ -3,11 +3,9 @@ import { Plus, Trash2 } from 'lucide-react';
 import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 
-import { Print } from 'capacitor-print';
-import html2pdf from 'html2pdf.js';
+import { Printer } from '@bcyesil/capacitor-plugin-printer';
 
-const logo = `${window.location.origin}${getLogo}`;
-console.log("logo ", logo)
+const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 // get old invoice list
 const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
@@ -31,118 +29,189 @@ const DashboardViewInvoice = () => {
     const printInvoice = async () => {
         // Create the HTML content
         const invoiceContent = `
-        <!DOCTYPE html>
-          <html>
-              <head>
-              <title>${invoiceData?.invoiceType || "Invoice"}</title>
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                  body { font-family: Arial, sans-serif; padding: 20px; }
-                  h1 { font-size: 24px; margin-bottom: 10px; }
-                  .section-total { float: right; }
-                  .section-bill-from { float: left; width: 30% }
-                  .section-bill-to { float: right; width: 40%}
-                  .section-bill-gap { float: right; width: 30%}
-                  .section { margin-bottom: 20px; clear: both }
-                  .section-item { padding-top: 10px; }
-                  .section h2, .section-bill-to h2, .section-bill-from h2, .section-bill-gap h2 { font-size: 18px; margin-bottom: 8px; }
-                  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-                  table, th, td { border: 1px solid #000; padding: 8px; text-align: left; }
-                  .total { font-weight: bold; }
-                  .text-right { text-align: right; }
-                  .logo { float: right; width: 150px; margin-top: 10px; }
-                  .watermark {
-                      position: fixed;
-                      top: 40%;
-                      left: 12%;
-                      transform: translate(-50%, -50%);
-                      opacity: 0.3;
-                      z-index: -1;
-                  }
-                    @media print {
-                        body { -webkit-print-color-adjust: exact; }
-                        .watermark { opacity: 0.3 !important; }
-                    }
-              </style>
-              </head>
-              <body>
-              <img src=${logo} alt="Company Logo" class="logo"/>
-              <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;"/>
-              <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
-              <div class="section">
-                  <h2>${invoiceData?.invoiceType || "Invoice"} Details</h2>
-                  <p>${invoiceData?.invoiceType || "Invoice"} Number: ${invoiceData?.invoiceNumber}</p>
-                  <p>Date: ${invoiceData?.date}</p>
-              </div>
-              <div class="section-bill-from">
-                  <h2>From</h2>
-                  <p>${invoiceData?.companyName}</p>
-                  <p>${invoiceData?.companyAddress}</p>
-              </div>
-              <div class="section-bill-to">
-                  <h2>Bill To</h2>
-                  <p>${invoiceData?.clientName}</p>
-                  <p>${invoiceData?.clientAddress}</p>
-              </div>
-              <div class="section section-item">
-                  <h2>Items</h2>
-                  <table>
-                  <thead>
-                      <tr>
-                      <th>Description</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
-                      <th>Total</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      ${invoiceData?.items?.map(item => `
-                      <tr>
-                          <td>${item.description}</td>
-                          <td>${item.quantity}</td>
-                          <td>${invoiceData?.currency} ${item.price.toFixed(2)}</td>
-                          <td class="text-right">${invoiceData?.currency} ${(item.quantity * item.price).toFixed(2)}</td>
-                      </tr>
-                      `).join('')}
-                  </tbody>
-                  </table>
-              </div>
-              <div class="section-total">
-                  <p>Subtotal: ${invoiceData?.currency} ${calculateSubtotal().toFixed(2)}</p>
-                  <p>Tax (10%): ${invoiceData?.currency} ${calculateTax().toFixed(2)}</p>
-                  <p class="total">Total: ${invoiceData?.currency} ${calculateTotal().toFixed(2)}</p>
-              </div>
-              <div class="section">
-                  <h2>Notes</h2>
-                  <p>${invoiceData?.notes}</p>
-              </div>
-              </body>
-          </html>
-        `;
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <title>${invoiceData?.invoiceType || "Invoice"}</title>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                }
 
+                h1 {
+                font-size: 24px;
+                margin-bottom: 10px;
+                }
+
+                .section {
+                margin-bottom: 20px;
+                }
+
+                .section h2 {
+                font-size: 18px;
+                margin-bottom: 8px;
+                }
+
+                table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+                }
+
+                table, th, td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+                }
+
+                .logo {
+                width: 90px;
+                }
+
+                .watermark {
+                position: fixed;
+                top: 40%;
+                left: 12%;
+                transform: translate(-50%, -50%);
+                opacity: 0.3;
+                z-index: -1;
+                }
+                .total {
+                font-weight: bold;
+                }
+
+                .text-right {
+                text-align: right;
+                }
+
+                @media print {
+                body {
+                    margin: 0;
+                    padding: 20px;
+                    -webkit-print-color-adjust: exact;
+                }
+
+                .watermark {
+                    opacity: 0.3 !important;
+                }
+                }
+            </style>
+            </head>
+            <body>
+            <!-- <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;" /> -->
+
+                <!-- Table layout for logo and invoice Type -->
+            <table style="width: 100%; margin-bottom: 20px; padding-left: 0px; border: none;">
+                <tr style="border: 0px solid #fff padding-left: 0px;" >
+                <td style="width: 30%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
+                    <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
+                </td>
+                <td style="width: 40%; vertical-align: top; border: 1px solid #fff"> </td>
+                <td style="width: 30%; text-align: right; border: 1px solid #fff">
+                    <img src=${logo} alt="Company Logo" class="logo" />
+                </td>
+                </tr>
+            </table>
+
+            <!-- Table layout for billing sections -->
+            <table style="width: 100%; margin-bottom: 0px; padding-left: 0px; border: none;">
+                <tr style="border: 0px solid #fff padding-left: 0px;" >
+                <td style="width: 40%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
+                    <div class="section-bill-from padding-left: 0px;">
+                    <h2>From</h2>
+                    <p>${invoiceData?.companyName}</p>
+                    <p>${invoiceData?.companyAddress}</p>
+                    </div>
+                </td>
+                <td style="width: 40%; vertical-align: top; border: 1px solid #fff">
+                    <div class="section-bill-to">
+                    <h2>Bill To</h2>
+                    <p>${invoiceData?.clientName}</p>
+                    <p>${invoiceData?.clientAddress}</p>
+                    </div>
+                </td>
+                </tr>
+            </table>
+
+            <div class="section">
+                <h2>${invoiceData?.invoiceType || "Invoice"} Details</h2>
+                <p>${invoiceData?.invoiceType || "Invoice"} Number: ${invoiceData?.invoiceNumber}</p>
+                <p>Date: ${invoiceData?.date}</p>
+            </div>
+
+            <div class="section">
+                <h2>Items</h2>
+                <table>
+                <thead>
+                    <tr>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${invoiceData?.items?.map(item => `
+                    <tr>
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>${invoiceData?.currency} ${item.price.toFixed(2)}</td>
+                    <td class="text-right">${invoiceData?.currency} ${(item.quantity * item.price).toFixed(2)}</td>
+                    </tr>
+                    `).join('')}
+                    
+               
+                    <tr style=" padding-top: 0px; margin-top: 0px; border: 1px solid #000">
+                        <td style="border: 0px solid #fff"></td>
+                        <td style="border: 0px solid #fff"></td>  
+                        <td style="border: 0px solid #fff"></td>                        
+                        <td class="text-right" style="border: 0px solid #fff">        
+                            <div class="section-total">
+                                <p>Subtotal: ${invoiceData?.currency} ${calculateSubtotal().toFixed(2)}</p>
+                                <p>Tax (10%): ${invoiceData?.currency} ${calculateTax().toFixed(2)}</p>
+                                <p class="total">Total: ${invoiceData?.currency} ${calculateTotal().toFixed(2)}</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>Notes</h2>
+                <p>${invoiceData?.notes}</p>
+            </div>
+            </body>
+            </html>
+        `;
 
 
         try {
             if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            // Mobile: replace the document content with invoice content
-                
-            console.log("user agent", navigator.userAgent)
-            console.log("user onLine", navigator.onLine)
-            console.log("user platform", window?.Capacitor?.platform)
-
-               
-            window.document.write(`${invoiceContent}
-                `);
+                // Create a new window for printing
+                window.document.write(`${invoiceContent}`);
                 window.document.close()
-                // for mobile
-                await Print.print({
-                    content: invoiceContent,
-                    name: 'Invoice',
-                    orientation: 'portrait',
-                    grayscale: false
-                });
-                // for web
-                window.print()
+                if (window?.Capacitor?.platform === "web") {
+                    // for web
+                    window.print()
+                }
+                else {
+                    // for mobile
+                    console.log('Print start:');
+                    try {
+                        Printer.print({ content: invoiceContent })
+
+                    } catch (error) {
+                        console.error('Error printing invoice:', error);
+                    } finally {
+                        console.log('Print result:');
+                    }
+
+                }
                 window.location.reload();
 
             } else {
@@ -181,6 +250,7 @@ const DashboardViewInvoice = () => {
             printFallback();
         }
     };
+
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">

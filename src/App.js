@@ -11,6 +11,7 @@ import Dashboard from './Dashboard/Dashboard';
 import DashboardViewInvoice from './Invoice/DashboardViewInvoice';
 import Profile from './Profile/Profile';
 import Payment from './Payment/Payment';
+import AppWrapper from './Footer/AppWrapper';
 
 
 let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
@@ -36,6 +37,7 @@ function App() {
   return (
     <Suspense fallback={loading}>
     <Router>
+      <AppWrapper />
       <div style={{ flex: 1 }}>
         <Routes>
         {/* path access */}
@@ -55,7 +57,9 @@ function App() {
           [ 
           <Route exact path="/reset-password" element={ <ResetPassword /> } key="1" />,
           <Route exact path="/" element={<Login />} key="2" />, 
-          <Route exact path="/signup" element={ <SignUp /> } key="3" />]
+          <Route exact path="/login" element={<Login />} key="3" />, 
+          <Route exact path="/signup" element={ <SignUp /> } key="4" />,
+          <Route exact path="*" element={<Login />} key="5" />, ]
         }
         </Routes>
         

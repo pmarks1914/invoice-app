@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 
-import logo from '../logo.png'
+import getLogo from '../logo.png'
 import { Col, Container, Row } from 'reactstrap';
 import Swal from 'sweetalert2';
 
+import { Printer } from '@bcyesil/capacitor-plugin-printer';
+const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 
 const InvoiceGenerator = () => {
@@ -30,7 +32,7 @@ const InvoiceGenerator = () => {
     };
 
     const calculateTax = () => {
-        return calculateSubtotal() * ( profileData?.tax || 0  ); // 10% tax rate
+        return calculateSubtotal() * (profileData?.tax || 0); // 10% tax rate
     };
 
     const calculateTotal = () => {
@@ -163,31 +165,69 @@ const InvoiceGenerator = () => {
               </body>
           </html>
         `;
-      
-        // Create an iframe and set its content
-        const iframe = document.createElement('iframe');
-        document.body.appendChild(iframe);
-        iframe.style.position = 'absolute';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.style.border = 'none';
-      
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(invoiceContent);
-        doc.close();
-      
-        // Trigger print dialog
-        iframe.contentWindow.print();
-      
-        // Remove the iframe after printing
-        iframe.onload = () => {
-          setTimeout(() => document.body.removeChild(iframe), 500);
-        };
+
+        try {
+            if (/Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                // Create a new window for printing
+                window.document.write(`${invoiceContent}`);
+                window.document.close()
+                if (window?.Capacitor?.platform === "web") {
+                    // for web
+                    window.print()
+                }
+                else {
+                    // for mobile
+                    console.log('Print start:');
+                    try {
+                        Printer.print({ content: invoiceContent })
+
+                    } catch (error) {
+                        console.error('Error printing invoice:', error);
+                    } finally {
+                        console.log('Print result:');
+                    }
+
+                }
+                window.location.reload();
+
+            } else {
+                // Create an iframe and set its content
+                const iframe = document.createElement('iframe');
+                document.body.appendChild(iframe);
+                iframe.style.position = 'absolute';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = 'none';
+
+                const doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write(invoiceContent);
+                doc.close();
+
+                // Trigger print dialog
+                iframe.contentWindow.print();
+
+                // Remove the iframe after printing
+                iframe.onload = () => {
+                    setTimeout(() => document.body.removeChild(iframe), 500);
+                };
+            }
+        } catch (error) {
+            console.error('Printing failed:', error);
+            // Fallback for mobile
+            const printFallback = () => {
+                const printContent = document.createElement('div');
+                printContent.innerHTML = invoiceContent;
+                document.body.appendChild(printContent);
+                window.print();
+                document.body.removeChild(printContent);
+            };
+            printFallback();
+        }
     };
 
-    function actionManage(){
-        
+    function actionManage() {
+
         Swal.fire({
             icon: 'info',
             title: 'Action: Generate Invoice',
@@ -198,20 +238,20 @@ const InvoiceGenerator = () => {
             cancelButtonText: "Cancel",
             cancelButtonColor: 'red',
             confirmButtonColor: 'blue'
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 printInvoice()
-              }
-              else{
+            }
+            else {
                 // 
-              }
-          } );
+            }
+        });
     }
-    
+
 
     return (
         <div className="max-w-4xl mx-auto p-6 mb-10 bg-white rounded-lg shadow-lg">
-        {/* <div className="m"> */}
+            {/* <div className="m"> */}
             <Container className=' mb-10 '>
                 <div className="text-3xl font-bold mb-6 text-gray-800"> {profileData?.invoiceType || "Invoice"} </div>
 
@@ -333,7 +373,7 @@ const InvoiceGenerator = () => {
                                 <span>{invoiceData?.currency} {calculateSubtotal().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between mb-2">
-                                <span>Tax ( {(profileData?.tax || 0)*100}%):</span>
+                                <span>Tax ( {(profileData?.tax || 0) * 100}%):</span>
                                 <span>{invoiceData?.currency} {calculateTax().toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between font-bold">
