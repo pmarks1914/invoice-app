@@ -5,6 +5,13 @@ import logo from '../logo.png'; // Assuming you have a logo similar to the Login
 import LockOut from '../Profile/LockOut';
 import Select, { ActionMeta, OnChangeValue } from 'react-select';
 
+
+
+let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
+let user_id = userDataStore?.user?.id
+
+// console.log("userDataStore ", userDataStore)
+
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -33,20 +40,28 @@ const ChangePassword = () => {
     setSubmitError("");
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_API}/change-password`, {
-        oldPassword,
-        newPassword,
-        newPassword2,
-      });
+      const response = await axios.patch(`${process.env.REACT_APP_BASE_API}/change-password/${user_id}`, {
+          oldPassword,
+          password1: newPassword,
+          password2: newPassword2,
+      },{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userDataStore?.token}`,
+          'id': user_id
+      }
+      }
+    );
 
-      if (response.data.success) {
+      if (response?.data?.code?.toString() === "200") {
         // Handle successful password change (e.g., navigate or show success message)
-        setTimeout(() => window.location.href = '/dashboard', 1000);
+        // setTimeout(() => window.location.href = '/dashboard', 1000);
+        setSubmitError(`Completed: ${response.data.message}`);
       } else {
-        setSubmitError("Failed to change password. Please try again.");
+        setSubmitError(`Failed to change password. Please try again.${response.data.message}`);
       }
     } catch (err) {
-      setSubmitError("An error occurred. Please try again later.");
+      setSubmitError(`An error occurred. Please try again later.`);
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,10 @@ import { Col, Container, Row } from 'reactstrap';
 
 import { Printer } from '@bcyesil/capacitor-plugin-printer';
 
+
+let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
+
+// console.log("userDataStore ", userDataStore)
 const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 // get old invoice list
