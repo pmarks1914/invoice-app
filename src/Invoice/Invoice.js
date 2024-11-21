@@ -6,7 +6,10 @@ import { Col, Container, Row } from 'reactstrap';
 import Swal from 'sweetalert2';
 
 import { Printer } from '@bcyesil/capacitor-plugin-printer';
-const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
+
+let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
+
+const logo = userDataStore?.user?.file_photo || 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 
 const InvoiceGenerator = () => {
@@ -157,14 +160,14 @@ const InvoiceGenerator = () => {
         <body>
         <!-- <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;" /> -->
 
-            <!-- Table layout for logo and invoice Type -->
+        <!-- Table layout for logo and invoice Type -->
         <table style="width: 100%; margin-bottom: 20px; padding-left: 0px; border: none;">
-            <tr style="border: 0px solid #fff padding-left: 0px;" >
+            <tr style="border: 0px solid #fff; padding-left: 0px;" >
             <td style="width: 30%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
                 <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
             </td>
-            <td style="width: 40%; vertical-align: top; border: 1px solid #fff"> </td>
-            <td style="width: 30%; text-align: right; border: 1px solid #fff">
+            <td style="width: 40%; vertical-align: top; border: 0px solid #fff"> </td>
+            <td style="width: 30%; text-align: right; border: 0px solid #fff">
                 <img src=${logo} alt="Company Logo" class="logo" />
             </td>
             </tr>
@@ -172,7 +175,7 @@ const InvoiceGenerator = () => {
 
         <!-- Table layout for billing sections -->
         <table style="width: 100%; margin-bottom: 0px; padding-left: 0px; border: none;">
-            <tr style="border: 0px solid #fff padding-left: 0px;" >
+            <tr style="border: 0px solid #fff; padding-left: 0px;" >
             <td style="width: 40%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
                 <div class="section-bill-from padding-left: 0px;">
                 <h2>From</h2>
@@ -180,7 +183,7 @@ const InvoiceGenerator = () => {
                 <p>${invoiceData?.companyAddress}</p>
                 </div>
             </td>
-            <td style="width: 40%; vertical-align: top; border: 1px solid #fff">
+            <td style="width: 40%; vertical-align: top; border: 0px solid #fff">
                 <div class="section-bill-to">
                 <h2>Bill To</h2>
                 <p>${invoiceData?.clientName}</p>

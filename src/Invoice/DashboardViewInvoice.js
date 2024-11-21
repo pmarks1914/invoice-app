@@ -9,7 +9,7 @@ import { Printer } from '@bcyesil/capacitor-plugin-printer';
 let userDataStore = JSON.parse(localStorage.getItem("userDataStore"));
 
 // console.log("userDataStore ", userDataStore)
-const logo = 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
+const logo = userDataStore?.user?.file_photo || 'https://test.ventureinnovo.com/static/media/logo.a51192bf9b20006900d6.png';
 
 // get old invoice list
 const getInvoice = JSON.parse(localStorage.getItem("old-invoice"));
@@ -107,9 +107,9 @@ const DashboardViewInvoice = () => {
             <body>
             <!-- <img src=${logo} alt="Company Logo" class="watermark" style="width: 400px; height: auto;" /> -->
 
-                <!-- Table layout for logo and invoice Type -->
+            <!-- Table layout for logo and invoice Type -->
             <table style="width: 100%; margin-bottom: 20px; padding-left: 0px; border: none;">
-                <tr style="border: 0px solid #fff padding-left: 0px;" >
+                <tr style="border: 0px solid #fff; padding-left: 0px;" >
                 <td style="width: 30%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
                     <h1>${invoiceData?.invoiceType || "Invoice"}</h1>
                 </td>
@@ -122,7 +122,7 @@ const DashboardViewInvoice = () => {
 
             <!-- Table layout for billing sections -->
             <table style="width: 100%; margin-bottom: 0px; padding-left: 0px; border: none;">
-                <tr style="border: 0px solid #fff padding-left: 0px;" >
+                <tr style="border: 0px solid #fff; padding-left: 0px;" >
                 <td style="width: 40%; vertical-align: top; border: 0px solid #fff; padding-left: 0px;">
                     <div class="section-bill-from padding-left: 0px;">
                     <h2>From</h2>
