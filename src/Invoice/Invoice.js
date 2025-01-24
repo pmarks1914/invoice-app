@@ -185,7 +185,7 @@ const InvoiceGenerator = () => {
             </td>
             <td style="width: 40%; vertical-align: top; border: 0px solid #fff">
                 <div class="section-bill-to">
-                <h2>Bill To</h2>
+                <h2>To</h2>
                 <p>${invoiceData?.clientName}</p>
                 <p>${invoiceData?.clientAddress}</p>
                 </div>
@@ -380,7 +380,7 @@ const InvoiceGenerator = () => {
                         />
                     </div>
                     <div>
-                        <div className="font-medium mb-2">Bill To:</div>
+                        <div className="font-medium mb-2">To:</div>
                         <input
                             type="text"
                             name="clientName"
