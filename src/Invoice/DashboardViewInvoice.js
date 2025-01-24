@@ -307,7 +307,7 @@ const DashboardViewInvoice = () => {
                         />
                     </div>
                     <div>
-                        <div className="font-medium mb-2">Bill To:</div>
+                        <div className="font-medium mb-2">To:</div>
                         <input
                             type="text"
                             name="clientName"
