@@ -392,7 +392,7 @@ const DashboardViewInvoice = () => {
                     onClick={() => printInvoice()}
                     className="mt-6 mb-6 bg-color-light-blue p-2 rounded"
                 >
-                    View Invoice
+                    View {invoiceData?.invoiceType}
                 </button>
 
             </Container>
